@@ -1,0 +1,9 @@
+Package: cbn
+Version: 0.0.0.9000
+Title: Replication materials for CBN
+Description: Replicates the paper
+Authors@R: person("Will", "Lowe", , "wlowe@princeton.edu", c("aut", "cre"))
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
