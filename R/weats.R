@@ -53,14 +53,12 @@ WEAT3$EuropeanAmericanNames_all <- c("Adam", "Chip", "Harry", "Josh", "Roger",
                                  "Rachel", "Wendy")
 WEAT3$EuropeanAmericanNames <- c("Adam", "Harry", "Josh", "Roger",
                                      "Alan", "Frank", "Justin",
-                                     "Ryan", "Andrew", "Jack", "Matthew",                                       "Stephen", "Brad", "Greg", "Paul",
-                                    "Jonathan", "Peter",                                     "Amanda", "Courtney", "Heather",
-                                     "Melanie",
-                                     "Katie", "Betsy",
+                                     "Ryan", "Andrew", "Jack", "Matthew",                                              "Stephen", "Brad", "Greg", "Paul",
+                                     "Jonathan", "Peter", "Amanda", "Courtney",
+                                     "Heather", "Melanie", "Katie", "Betsy",
                                      "Kristin", "Nancy", "Stephanie",
-                                     "Ellen", "Lauren",
-                                     "Colleen", "Emily", "Megan",
-                                     "Rachel")
+                                     "Ellen", "Lauren", "Colleen", "Emily",
+                                     "Megan", "Rachel")
 WEAT3$AfricanAmericanNames_all <- c("Alonzo", "Jamel", "Lerone", "Percell",
                                     "Theo", "Alphonse", "Jerome", "Leroy",
                                     "Rasaan", "Torrance", "Darnell", "Lamar",
@@ -68,20 +66,19 @@ WEAT3$AfricanAmericanNames_all <- c("Alonzo", "Jamel", "Lerone", "Percell",
                                     "Lamont", "Malik", "Terrence", "Tyrone",
                                     "Everol", "Lavon", "Marcellus", "Terryl",
                                     "Wardell", "Aiesha", "Lashelle", "Nichelle",
-                                    "Shereen", "Temeka", "Ebony", "Latisha",                                           "Shaniqua", "Tameisha", "Teretha", "Jasmine",                                      "Latonya", "Shanise", "Tanisha", "Tia",
-                                    "Lakisha", "Latoya", "Sharise", "Tashika",                                         "Yolanda", "Lashandra", "Malika", "Shavonn",
+                                    "Shereen", "Temeka", "Ebony", "Latisha",                                          "Shaniqua", "Tameisha", "Teretha", "Jasmine",                                     "Latonya", "Shanise", "Tanisha", "Tia",
+                                    "Lakisha", "Latoya", "Sharise", "Tashika",                                        "Yolanda", "Lashandra", "Malika", "Shavonn",
                                     "Tawanda", "Yvette")
 WEAT3$AfricanAmericanNames <- c("Alonzo", "Jamel",
-                                    "Theo", "Alphonse", "Jerome", "Leroy",
-                                    "Torrance", "Darnell", "Lamar",
-                                    "Lionel", "Tyree", "Deion",
-                                    "Lamont", "Malik", "Terrence", "Tyrone",
-                                    "Lavon", "Marcellus",
-                                    "Wardell", "Nichelle",
-                                    "Shereen", "Ebony", "Latisha",                                           "Shaniqua", "Jasmine",                                      "Tanisha", "Tia",
-                                    "Lakisha", "Latoya",                                         "Yolanda", "Malika",
-
-                                                                "Yvette")
+                                "Theo", "Alphonse", "Jerome", "Leroy",
+                                "Torrance", "Darnell", "Lamar",
+                                "Lionel", "Tyree", "Deion",
+                                "Lamont", "Malik", "Terrence", "Tyrone",
+                                "Lavon", "Marcellus",
+                                "Wardell", "Nichelle",
+                                "Shereen", "Ebony", "Latisha",                                                    "Shaniqua", "Jasmine", "Tanisha", "Tia",
+                                "Lakisha", "Latoya", "Yolanda", "Malika",
+                                "Yvette")
 # as above
 WEAT3$Pleasant <- c("caress", "freedom", "health", "love", "peace", "cheer",
                "friend", "heaven", "loyal", "pleasure", "diamond", "gentle",
@@ -114,10 +111,10 @@ WEAT4$AfricanAmericanNames_all <- c("Darnell", "Hakim", "Jermaine", "Kareem",
                                     "Kenya", "Latonya", "Lakisha", "Latoya",
                                     "Tamika", "Tanisha")
 WEAT4$AfricanAmericanNames <- c("Darnell", "Hakim", "Jermaine", "Kareem",
-                                    "Jamal", "Leroy", "Rasheed",
-                                    "Tyrone", "Aisha", "Ebony", "Keisha",
-                                    "Kenya", "Lakisha", "Latoya",
-                                    "Tamika", "Tanisha")
+                                "Jamal", "Leroy", "Rasheed",
+                                "Tyrone", "Aisha", "Ebony", "Keisha",
+                                "Kenya", "Lakisha", "Latoya",
+                                "Tamika", "Tanisha")
 WEAT4$Pleasant <- c("caress", "freedom", "health", "love", "peace", "cheer",
                     "friend", "heaven", "loyal", "pleasure", "diamond", "gentle",
                     "honest", "lucky", "rainbow", "diploma", "gift", "honor",
@@ -137,20 +134,20 @@ WEAT5$EuropeanAmericanNames_all <- c("Brad", "Brendan", "Geoffrey", "Greg",
                                      "Emily", "Jill", "Laurie", "Kristen",
                                      "Meredith", "Sarah")
 WEAT5$EuropeanAmericanNames <- c("Brad", "Brendan", "Geoffrey", "Greg",
-                                     "Brett", "Matthew", "Neil",
-                                     "Todd", "Allison", "Anne", "Carrie",
-                                     "Emily", "Jill", "Laurie",
-                                     "Meredith", "Sarah")
+                                 "Brett", "Matthew", "Neil",
+                                 "Todd", "Allison", "Anne", "Carrie",
+                                 "Emily", "Jill", "Laurie",
+                                 "Meredith", "Sarah")
 WEAT5$AfricanAmericanNames_all <- c("Darnell", "Hakim", "Jermaine", "Kareem",
-                                "Jamal", "Leroy", "Rasheed", "Tremayne",
-                                "Tyrone", "Aisha", "Ebony", "Keisha", "Kenya",
-                                "Latonya", "Lakisha", "Latoya", "Tamika",
-                                "Tanisha")
-WEAT5$AfricanAmericanNames <- c("Darnell", "Hakim", "Jermaine", "Kareem",
-                                    "Jamal", "Leroy", "Rasheed",
+                                    "Jamal", "Leroy", "Rasheed", "Tremayne",
                                     "Tyrone", "Aisha", "Ebony", "Keisha", "Kenya",
-                                    "Lakisha", "Latoya", "Tamika",
+                                    "Latonya", "Lakisha", "Latoya", "Tamika",
                                     "Tanisha")
+WEAT5$AfricanAmericanNames <- c("Darnell", "Hakim", "Jermaine", "Kareem",
+                                "Jamal", "Leroy", "Rasheed",
+                                "Tyrone", "Aisha", "Ebony", "Keisha", "Kenya",
+                                "Lakisha", "Latoya", "Tamika",
+                                "Tanisha")
 WEAT5$Pleasant <- c("joy", "love", "peace", "wonderful", "pleasure", "friend",
                    "laughter", "happy")
 WEAT5$Unpleasant <- c("agony", "terrible", "horrible", "nasty", "evil", "war",
@@ -225,3 +222,22 @@ WEFAT2$FemaleAttributes <- c("female", "woman", "girl", "sister", "she", "her",
                              "hers", "daughter")
 WEFAT2$MaleAttributes <- c("male", "man", "boy", "brother", "he", "him", "his",
                            "son")
+
+unused_vocab <- c("Chip", "Fred", "Jed", "Todd", "Brandon", "Hank", "Wilbur",
+                  "Ian", "Sara", "Amber", "Crystal", "Meredith", "Shannon",
+                  "Betsy", "Donna", "Bobbie-Sue", "Peggy", "Sue-Ellen", "Wendy",
+                  "Lerone", "Percell", "Rasaan", "Rashaun", "Everol", "Terryl",
+                  "Aiesha", "Lashelle", "Temeka", "Tameisha", "Tereth",
+                  "Latonya", "Shanise", "Sharise", "Tashika", "Lashandra",
+                  "Shavonn", "Tawanda", "Jay", "Kristen", "Tremayne")
+
+download_common_crawl <- function(folder = "."){
+  message("This might take a few minutes...")
+  download.file("http://nlp.stanford.edu/data/glove.840B.300d.zip",
+                destfile = file.path(folder, "glove.840B.300d.zip"))
+  message("Download complete.  Unzipping")
+  unzip(file.path(folder, "glove.840B.300d.zip"))
+  message("The unzipped file should be: ",
+          file.path(folder, "glove.840B.300d.txt"))
+}
+
