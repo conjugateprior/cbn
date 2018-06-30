@@ -1,6 +1,12 @@
 #' CBN
 #'
-#' A package to do CBN kinds of thing.
+#' This package contains tools and experimental items necessary to
+#' replicate Caliskan, Bryson, and Narayanan (2017). 'Semantics derived
+#'         automatically from language corpora contain human-like biases'
+#'
+#' @source Caliskan, Bryson, and Narayanan (2017). 'Semantics derived
+#'         automatically from language corpora contain human-like biases'
+#'         \emph{Science}. 356:6334 \url{http://doi.org/10.1126/science.aal4230}.
 #'
 #' @docType package
 #' @name cbn
@@ -241,35 +247,46 @@ unused_vocab <- c("Chip", "Fred", "Jed", "Todd", "Brandon", "Hank", "Wilbur",
                   "Latonya", "Shanise", "Sharise", "Tashika", "Lashandra",
                   "Shavonn", "Tawanda", "Jay", "Kristen", "Tremayne")
 
-set_commoncrawl_location <- function(f){
+
+
+#' Set the Location of the Vectors File
+#'
+#' If you want prefer this setting to persist
+#' across sessions, add \code{CBN_VECTORS_LOC=/Users/me/Documents/myvectors.txt}
+#' or similar to your \code{~/.Renviron} file (creating the file if necessary).
+#'
+#' @param f path where you unzipped your vectors file
+#' @return Nothing
+#' @export
+set_vectors_location <- function(f){
   f <- normalizePath(f)
   if (file.exists(f))
-    Sys.setenv(COMMONCRAWL_LOCATION = f)
+    Sys.setenv(VECTORS_LOC = f)
   else
     message(f, "does not exist!")
 }
 
-get_commoncrawl_location <- function(){
-  cc_loc <- Sys.getenv("COMMONCRAWL_LOCATION")
+
+
+#' Get the Location of the Vectors File
+#'
+#' Returns the full path to the file of word vectors.  If there is no
+#' environment variable \code{CBN_VECTORS_LOC}, prompts to set one.
+#'
+#' If you want prefer the location of your downloaded vectors to persist
+#' across sessions, add \code{CBN_VECTORS_LOC=/Users/me/Documents/myvectors.txt}
+#' or similar to your \code{~/.Renviron} file (creating the file if necessary).
+#'
+#' @return a full path to the vectors file
+#' @export
+vectors_location <- function(){
+  cc_loc <- Sys.getenv("VECTORS_LOC")
   if (is.null(cc_loc))
-    stop("Location unkown: use set_commoncrawl to assign it")
+    stop("Location unkown: use set_vectors_file to assign it")
   else
     cc_loc
 }
 
-extract_from_commoncrawl <- function(){
-
-}
-
-download_common_crawl <- function(folder = "."){
-  message("This might take a few minutes...")
-  download.file("http://nlp.stanford.edu/data/glove.840B.300d.zip",
-                destfile = file.path(folder, "glove.840B.300d.zip"))
-  message("Download complete.  Unzipping")
-  unzip(file.path(folder, "glove.840B.300d.zip"))
-  message("The unzipped file should be: ",
-          file.path(folder, "glove.840B.300d.txt"))
-}
 
 .onUnload <- function(libpath) {
   library.dynam.unload("cbn", libpath)

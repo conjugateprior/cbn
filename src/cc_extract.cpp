@@ -32,12 +32,13 @@ int get_vector_dim(std::string fname){
   return tokens.size() - 1;
 }
 
-//' Extract Word Vectors
+//' Extract Word Vectors from a File
 //'
 //' This function reads a file of vectors in line by line and returns
 //' the vectors correspoinding to the words provided as the first argument
 //' as rows. If a word cannot be found, this row of the matrix is all NAs.
 //' The matrix returned has the words as rownames and no column names.
+//' It expects word vectors in the style of GLOVE common crawl.
 //'
 //' \code{report_every} is the interval (in lines of \code{vectors_file})
 //' at which the code checks whether the user is trying to stop the function.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{extract_words}
 \alias{extract_words}
-\title{Extract Word Vectors}
+\title{Extract Word Vectors from a File}
 \usage{
 extract_words(words, vectors_file, verbose, report_every)
 }
@@ -23,6 +23,7 @@ This function reads a file of vectors in line by line and returns
 the vectors correspoinding to the words provided as the first argument
 as rows. If a word cannot be found, this row of the matrix is all NAs.
 The matrix returned has the words as rownames and no column names.
+It expects word vectors in the style of GLOVE common crawl.
 }
 \details{
 \code{report_every} is the interval (in lines of \code{vectors_file})
