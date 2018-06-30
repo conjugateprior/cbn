@@ -1,5 +1,5 @@
 Package: cbn
-Version: 0.0.0.9000
+Version: 0.0.1
 Title: Tools and replication materials for Caliskan, Bryson, and Narayanan (2017)
 Description: Replicates the paper
 Authors@R: person("Will", "Lowe", email = "wlowe@princeton.edu", role = c("aut", "cre"))
