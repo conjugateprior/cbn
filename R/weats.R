@@ -1,3 +1,7 @@
+#' @useDynLib cbn
+#' @importFrom Rcpp sourceCpp
+NULL
+
 WEAT1 <- WEAT2 <- WEAT3 <- WEAT4 <- WEAT5 <- WEAT6 <- WEAT7 <- WEAT8 <- WEAT9 <- WEAT10 <- WEFAT1 <- WEFAT2 <- list()
 
 WEAT1$Flowers <- c("aster", "clover", "hyacinth", "marigold", "poppy", "azalea",
@@ -231,6 +235,26 @@ unused_vocab <- c("Chip", "Fred", "Jed", "Todd", "Brandon", "Hank", "Wilbur",
                   "Latonya", "Shanise", "Sharise", "Tashika", "Lashandra",
                   "Shavonn", "Tawanda", "Jay", "Kristen", "Tremayne")
 
+set_commoncrawl_location <- function(f){
+  f <- normalizePath(f)
+  if (file.exists(f))
+    Sys.setenv(COMMONCRAWL_LOCATION = f)
+  else
+    message(f, "does not exist!")
+}
+
+get_commoncrawl_location <- function(){
+  cc_loc <- Sys.getenv("COMMONCRAWL_LOCATION")
+  if (is.null(cc_loc))
+    stop("Location unkown: use set_commoncrawl to assign it")
+  else
+    cc_loc
+}
+
+extract_from_commoncrawl <- function(){
+
+}
+
 download_common_crawl <- function(folder = "."){
   message("This might take a few minutes...")
   download.file("http://nlp.stanford.edu/data/glove.840B.300d.zip",
@@ -241,3 +265,6 @@ download_common_crawl <- function(folder = "."){
           file.path(folder, "glove.840B.300d.txt"))
 }
 
+.onUnload <- function(libpath) {
+  library.dynam.unload("cbn", libpath)
+}
