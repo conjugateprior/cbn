@@ -19,30 +19,67 @@ using namespace Rcpp;
 //   http://gallery.rcpp.org/
 //
 
-// [[Rcpp::export]]
-NumericMatrix extract_words(CharacterVector p, // words to look for
-                            int width, // dimensionality of these vectors
-                            CharacterVector cc_path,
-                            bool verbose, // should we report
-                            int report_every) // every how many lines
-{
-  std::string ccfile = Rcpp::as<std::string>(cc_path);
-  if (verbose)
-    Rcerr << "Searching " << cc_path << " for words" << "\n";
+// split a line on spaces and return the length - 1
+// assuming that that was the word at the beginning
+int get_vector_dim(std::string fname){
+  std::ifstream vectors(fname);
+  std::string line;
+  getline(vectors, line);
+  std::istringstream buf(line);
+  std::istream_iterator<std::string> beg(buf), end;
+  std::vector<std::string> tokens(beg, end);
+  vectors.close();
+  return tokens.size() - 1;
+}
 
-  NumericMatrix nm(p.size(), width);
+//' Extract Word Vectors
+//'
+//' This function reads a file of vectors in line by line and returns
+//' the vectors correspoinding to the words provided as the first argument
+//' as rows. If a word cannot be found, this row of the matrix is all NAs.
+//' The matrix returned has the words as rownames and no column names.
+//'
+//' \code{report_every} is the interval (in lines of \code{vectors_file})
+//' at which the code checks whether the user is trying to stop the function.
+//' If \code{verbose} is also TRUE then a period is printed and the code
+//' also reports which words it has found vectors for.
+//'
+//' Note: In order to guess the dimensionality of the vectors in \code{vectors_file}
+//' we assume that each line of the file is a word and then K floats separated
+//' by a single space.
+//'
+//' @param words a vector of words to search for
+//' @param vectors_file a full path to the vectors file
+//' @param verbose whether to report on progress
+//' @param report_every if \code{verbose} is TRUE
+//' @return A matrix with word vectors from \code{vectors_file} as rows
+//' @export
+// [[Rcpp::export]]
+NumericMatrix extract_words(CharacterVector words, // words to look for
+                            CharacterVector vectors_file,
+                            bool verbose, // whether should we report
+                            int report_every) {
+  std::string ccfile = Rcpp::as<std::string>(vectors_file);
+  if (verbose)
+    Rcerr << "Searching " << vectors_file << " for words" << "\n";
+
+  int width = get_vector_dim(ccfile); // try to guess the dimensionality
+  if (verbose)
+    Rcerr << "Assuming all these vectors have " << width << " elements\n";
+
+  NumericMatrix nm(words.size(), width);
   nm.fill(NumericVector::get_na());
-  rownames(nm) = p;
+  rownames(nm) = words;
   // fill a map with: std:string words_to_look_for -> row_of_nm_to_put_vector_in
   std::map<std::string,int> vocab;
   CharacterVector::iterator it;
   int ii = 0;
-  for(it = p.begin(); it != p.end(); ++it) {
+  for(it = words.begin(); it != words.end(); ++it) {
     std::string val = Rcpp::as<std::string>(*it);
     vocab.insert(std::pair<std::string,int>(val, ii));
     ii++;
   }
-  std::vector<bool> done(p.size(), false);
+  std::vector<bool> done(words.size(), false);
 
   std::string line;
   std::ifstream vectors(ccfile);
@@ -65,12 +102,12 @@ NumericMatrix extract_words(CharacterVector p, // words to look for
 
         // bail out if we've got all the words we wanted
         int how_much = 0;
-        for (int jj = 0; jj < p.size(); jj++)
+        for (int jj = 0; jj < words.size(); jj++)
           if (done[jj])
             how_much++;
-        if (how_much == p.size()){
+        if (how_much == words.size()){
           if (verbose)
-            Rcerr << "Found all the words. Closing the file" << "\n";
+            Rcerr << "Found all the vectors" << "\n";
           break;
         }
 

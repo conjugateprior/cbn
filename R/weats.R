@@ -1,3 +1,9 @@
+#' CBN
+#'
+#' A package to do CBN kinds of thing.
+#'
+#' @docType package
+#' @name cbn
 #' @useDynLib cbn
 #' @importFrom Rcpp sourceCpp
 NULL

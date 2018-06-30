@@ -6,23 +6,22 @@
 using namespace Rcpp;
 
 // extract_words
-NumericMatrix extract_words(CharacterVector p, int width, CharacterVector cc_path, bool verbose, int report_every);
-RcppExport SEXP _cbn_extract_words(SEXP pSEXP, SEXP widthSEXP, SEXP cc_pathSEXP, SEXP verboseSEXP, SEXP report_everySEXP) {
+NumericMatrix extract_words(CharacterVector words, CharacterVector vectors_file, bool verbose, int report_every);
+RcppExport SEXP _cbn_extract_words(SEXP wordsSEXP, SEXP vectors_fileSEXP, SEXP verboseSEXP, SEXP report_everySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CharacterVector >::type p(pSEXP);
-    Rcpp::traits::input_parameter< int >::type width(widthSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type cc_path(cc_pathSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type words(wordsSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type vectors_file(vectors_fileSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     Rcpp::traits::input_parameter< int >::type report_every(report_everySEXP);
-    rcpp_result_gen = Rcpp::wrap(extract_words(p, width, cc_path, verbose, report_every));
+    rcpp_result_gen = Rcpp::wrap(extract_words(words, vectors_file, verbose, report_every));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_cbn_extract_words", (DL_FUNC) &_cbn_extract_words, 5},
+    {"_cbn_extract_words", (DL_FUNC) &_cbn_extract_words, 4},
     {NULL, NULL, 0}
 };
 
