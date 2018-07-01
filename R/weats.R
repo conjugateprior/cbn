@@ -149,16 +149,17 @@ cbn_extract_word_vectors <- function(words, verbose = FALSE, report_every = 1000
 #' rows of a matrix \code{x}. When \code{x} and \code{y} are vectors
 #' it calculates the cosine similarity between them.  When \code{x}
 #' is a vector and \code{y} is a matrix it calculates the cosine
-#' between \code{x} and each rows of \code{y}.
+#' between \code{x} and each row of \code{y}.
 #'
 #' This code is taken directly from the \code{lsa} package but adjusted to
 #' operate rowwise.
 #'
 #' @param x A vector or a matrix (e.g., a document-term matrix).
 #' @param y A vector with compatible dimensions to x. If NULL, use all columns of \code{x}.
-#' @source The original code is from the \code{lsa::cosine} by
-#'         Fridolin Wild (f.wild@open.ac.uk).
-#' @return A ncol(x) by ncol(x) matrix of cosine similarities or a
+#' @source The original code is from the \code{cosine} function by
+#'         Fridolin Wild (f.wild@open.ac.uk) in the \code{lsa} package.
+#' @return An \code{ncol(x)} by \code{ncol(x)} matrix of cosine similarities, a scalar
+#'         cosine similarity, or a vector of cosine simialrities of length \code{nrow(y)}.
 #' @export
 cbn_cosine <- function(x, y = NULL){
   if (is.matrix(x) && is.null(y)) {
