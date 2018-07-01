@@ -23,7 +23,6 @@
 #' @param verbose whether to report on progress
 #' @param report_every if \code{verbose} is TRUE
 #' @return A matrix with word vectors from \code{vectors_file} as rows
-#' @export
 extract_words <- function(words, vectors_file, verbose, report_every) {
     .Call('_cbn_extract_words', PACKAGE = 'cbn', words, vectors_file, verbose, report_every)
 }

@@ -94,9 +94,9 @@ cbn_get_vectorfile_location <- function(){
 #' @return a matrix with word vectors as rows
 #' @export
 cbn_extract_word_vectors <- function(words, verbose = FALSE, report_every = 100000){
-  loc <- get_vectors_location()
-  mat <- extract_words(words, vectors_file = loc, verbose = verbose,
-                       report_every = report_every)
+  loc <- cbn_get_vectorfile_location()
+  mat <- cbn::extract_words(words, vectors_file = loc, verbose = verbose,
+                            report_every = report_every)
   mat
 }
 

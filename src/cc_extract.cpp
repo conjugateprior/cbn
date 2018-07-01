@@ -54,7 +54,6 @@ int get_vector_dim(std::string fname){
 //' @param verbose whether to report on progress
 //' @param report_every if \code{verbose} is TRUE
 //' @return A matrix with word vectors from \code{vectors_file} as rows
-//' @export
 // [[Rcpp::export]]
 NumericMatrix extract_words(CharacterVector words, // words to look for
                             CharacterVector vectors_file,
