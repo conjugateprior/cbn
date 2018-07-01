@@ -25,6 +25,13 @@ NULL
 #'         \emph{Science}. 356:6334 \url{http://doi.org/10.1126/science.aal4230}.
 "cbn_items"
 
+#' Cosine Similarity for Every Pair of Study Items
+#'
+#' A matrix of cosine similarities between each item and every other one.
+#' Uses \code{cbn_items}.
+#'
+"cbn_item_cosines"
+
 #' Vectors for All Items Used in All Studies
 #'
 #' A 457 x 300 matrix of (row) vectors for all study items,
