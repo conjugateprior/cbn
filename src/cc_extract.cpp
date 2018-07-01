@@ -1,3 +1,4 @@
+// [[Rcpp::plugins(cpp14)]]
 #include<Rcpp.h>
 #include<iostream>
 #include<fstream>
@@ -6,18 +7,6 @@
 #include <iterator>
 
 using namespace Rcpp;
-
-// [[Rcpp::plugins(cpp11)]]
-
-// This is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp
-// function (or via the Source button on the editor toolbar). Learn
-// more about Rcpp at:
-//
-//   http://www.rcpp.org/
-//   http://adv-r.had.co.nz/Rcpp.html
-//   http://gallery.rcpp.org/
-//
 
 // split a line on spaces and return the length - 1
 // assuming that that was the word at the beginning
@@ -54,11 +43,12 @@ int get_vector_dim(std::string fname){
 // @param verbose whether to report on progress
 // @param report_every if \code{verbose} is TRUE
 // @return A matrix with word vectors from \code{vectors_file} as rows
+
 // [[Rcpp::export]]
 NumericMatrix extract_words(CharacterVector words, // words to look for
                             CharacterVector vectors_file,
-                            bool verbose, // whether should we report
-                            int report_every) {
+                            bool verbose = true, // whether should we report
+                            int report_every = 100000) {
   std::string ccfile = Rcpp::as<std::string>(vectors_file);
   if (verbose)
     Rcerr << "Searching " << vectors_file << " for words" << "\n";

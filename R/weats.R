@@ -138,7 +138,7 @@ cbn_get_vectorfile_location <- function(){
 cbn_extract_word_vectors <- function(words, verbose = FALSE, report_every = 100000){
   loc <- cbn_get_vectorfile_location() # stops if none is set
   mat <- cbn:::extract_words(words, vectors_file = loc, verbose = verbose,
-                            report_every = report_every)
+                             report_every = report_every)
   mat
 }
 
