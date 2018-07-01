@@ -32,28 +32,28 @@ int get_vector_dim(std::string fname){
   return tokens.size() - 1;
 }
 
-//' Extract Word Vectors from a File
-//'
-//' This function reads a file of vectors in line by line and returns
-//' the vectors correspoinding to the words provided as the first argument
-//' as rows. If a word cannot be found, this row of the matrix is all NAs.
-//' The matrix returned has the words as rownames and no column names.
-//' It expects word vectors in the style of GLOVE common crawl.
-//'
-//' \code{report_every} is the interval (in lines of \code{vectors_file})
-//' at which the code checks whether the user is trying to stop the function.
-//' If \code{verbose} is also TRUE then a period is printed and the code
-//' also reports which words it has found vectors for.
-//'
-//' Note: In order to guess the dimensionality of the vectors in \code{vectors_file}
-//' we assume that each line of the file is a word and then K floats separated
-//' by a single space.
-//'
-//' @param words a vector of words to search for
-//' @param vectors_file a full path to the vectors file
-//' @param verbose whether to report on progress
-//' @param report_every if \code{verbose} is TRUE
-//' @return A matrix with word vectors from \code{vectors_file} as rows
+// Extract Word Vectors from a File
+//
+// This function reads a file of vectors in line by line and returns
+// the vectors correspoinding to the words provided as the first argument
+// as rows. If a word cannot be found, this row of the matrix is all NAs.
+// The matrix returned has the words as rownames and no column names.
+// It expects word vectors in the style of GLOVE common crawl.
+//
+// \code{report_every} is the interval (in lines of \code{vectors_file})
+// at which the code checks whether the user is trying to stop the function.
+// If \code{verbose} is also TRUE then a period is printed and the code
+// also reports which words it has found vectors for.
+//
+// Note: In order to guess the dimensionality of the vectors in \code{vectors_file}
+// we assume that each line of the file is a word and then K floats separated
+// by a single space.
+//
+// @param words a vector of words to search for
+// @param vectors_file a full path to the vectors file
+// @param verbose whether to report on progress
+// @param report_every if \code{verbose} is TRUE
+// @return A matrix with word vectors from \code{vectors_file} as rows
 // [[Rcpp::export]]
 NumericMatrix extract_words(CharacterVector words, // words to look for
                             CharacterVector vectors_file,

@@ -4,7 +4,7 @@
 \name{cbn_items}
 \alias{cbn_items}
 \title{All Items Used in All Studies}
-\format{An object of class \code{data.frame} with 333 rows and 28 columns.}
+\format{An object of class \code{data.frame} with 730 rows and 3 columns.}
 \source{
 A. Caliskan, J. J. Bryson, and A. Narayanan (2017) 'Semantics derived
         automatically from language corpora contain human-like biases'

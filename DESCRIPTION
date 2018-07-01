@@ -1,5 +1,5 @@
 Package: cbn
-Version: 0.0.1
+Version: 0.0.2
 Title: Tools and replication materials for Caliskan, Bryson, and Narayanan (2017)
 Description: This package allows users to replicate the analysis in the paper and 
              also provides general purpose tools for working
@@ -14,3 +14,6 @@ Imports: readr,
     Rcpp
 LinkingTo: Rcpp
 RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

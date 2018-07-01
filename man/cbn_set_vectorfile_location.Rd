@@ -4,16 +4,26 @@
 \alias{cbn_set_vectorfile_location}
 \title{Set the Location of the Vectors File}
 \usage{
-cbn_set_vectorfile_location(f)
+cbn_set_vectorfile_location(f, persist = FALSE)
 }
 \arguments{
 \item{f}{path where you unzipped your vectors file}
+
+\item{persist}{Whether to add this to your R startup file}
 }
 \value{
 Nothing
 }
 \description{
-If you want prefer this setting to persist
-across sessions, add \code{CBN_VECTORS_LOC=/Users/me/Documents/myvectors.txt}
-or similar to your \code{~/.Renviron} file (creating the file if necessary).
+This function adds the location of the file of vectors to the
+current environment (as the value of \code{CBN_VECTORS_LOCATION}).
+If \code{persist} is TRUE it also adds this key to
+\code{~/.Renviron} so that it is retained across R sessions.
+}
+\details{
+To recover the current location, use
+\code{\link{cbn_get_vectorfile_location}}.
+}
+\seealso{
+\code{\link{cbn_get_vectorfile_location}}
 }

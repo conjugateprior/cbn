@@ -2,7 +2,7 @@
 % Please edit documentation in R/weats.R
 \name{cbn_extract_word_vectors}
 \alias{cbn_extract_word_vectors}
-\title{Extract Word Vectors}
+\title{Extract Word Vectors From Current Vector File}
 \usage{
 cbn_extract_word_vectors(words, verbose = FALSE, report_every = 1e+05)
 }
@@ -18,4 +18,7 @@ a matrix with word vectors as rows
 }
 \description{
 This function provides a more convenient wrapper for \code{extract_words}.
+It uses the current vector file, whose location can be found using
+\code{\link{cbn_get_vectorfile_location}} and assigned with
+\code{\link{cbn_set_vectorfile_location}}.
 }

@@ -55,53 +55,79 @@ NULL
 cbn_get_items <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
   study_type <- match.arg(type)
   if (study_type == "all") {
-    its <- sort(as.vector(na.omit(unique(unlist(cbn::cbn_items[,-1])))))
-    return(its)
+    unique(cbn::cbn_items$Word)
+  } else {
+    sname <- paste0(study_type, number)
+    cbn::cbn_items[cbn::cbn_items$Study == sname, ]
   }
-  sname <- paste0(study_type, number)
-  df <- cbn::cbn_items[cbn::cbn_items$Study == sname, ]
-  data.frame(Filter(function(x){ !all(is.na(x)) }, df))
 }
 
 #' Set the Location of the Vectors File
 #'
-#' If you want prefer this setting to persist
-#' across sessions, add \code{CBN_VECTORS_LOC=/Users/me/Documents/myvectors.txt}
-#' or similar to your \code{~/.Renviron} file (creating the file if necessary).
+#' This function adds the location of the file of vectors to the
+#' current environment (as the value of \code{CBN_VECTORS_LOCATION}).
+#' If \code{persist} is TRUE it also adds this key to
+#' \code{~/.Renviron} so that it is retained across R sessions.
+#'
+#' To recover the current location, use
+#' \code{\link{cbn_get_vectorfile_location}}.
 #'
 #' @param f path where you unzipped your vectors file
+#' @param persist Whether to add this to your R startup file
 #' @return Nothing
+#' @seealso \code{\link{cbn_get_vectorfile_location}}
 #' @export
-cbn_set_vectorfile_location <- function(f){
+cbn_set_vectorfile_location <- function(f, persist = FALSE){
   f <- normalizePath(f)
-  if (file.exists(f))
-    Sys.setenv(VECTORS_LOC = f)
-  else
+  if (file.exists(f)) {
+    Sys.setenv(CBN_VECTORS_LOCATION = f)
+    add_to_Renviron("CBN_VECTORS_LOCATION", f)
+  } else
     message(f, "does not exist!")
+}
+
+add_to_Renviron <- function(key, value) {
+  renviron = "~/.Renviron"
+  if (file.exists(renviron)) {
+    lines <- readLines(renviron)
+    new_lines <- Filter(function(x) { !startsWith(x, key) }, lines)
+    new_lines[[length(new_lines) + 1]] <- paste0(key, "=", value)
+    writeLines(paste0(new_lines, collapse = "\n"), renviron)
+  } else {
+    line <- paste0(key, "=", value, "\n")
+    writeLines(line, renviron)
+  }
 }
 
 #' Get the Location of the Vectors File
 #'
 #' Returns the full path to the file of word vectors.  If there is no
-#' environment variable \code{CBN_VECTORS_LOC}, prompts to set one.
+#' environment variable \code{CBN_VECTORS_LOCATION} in the current
+#' environment it prompts to set a location with
+#' \code{cbn_set_vectorfile_location}
 #'
 #' If you want prefer the location of your downloaded vectors to persist
-#' across sessions, add \code{CBN_VECTORS_LOC=/Users/me/Documents/myvectors.txt}
+#' across sessions, add
+#' \code{CBN_VECTORS_LOCATION=/Users/me/Documents/myvectors.txt}
 #' or similar to your \code{~/.Renviron} file (creating the file if necessary).
 #'
 #' @return a full path to the vectors file
+#' @seealso \code{\link{cbn_set_vectorfile_location}}
 #' @export
 cbn_get_vectorfile_location <- function(){
-  cc_loc <- Sys.getenv("VECTORS_LOC")
+  cc_loc <- Sys.getenv("CBN_VECTORS_LOCATION")
   if (is.null(cc_loc))
-    stop("Location unkown: use set_vectors_file to assign it")
+    stop("Location unknown: use cbn_set_vectorfile_location to assign it")
   else
     cc_loc
 }
 
-#' Extract Word Vectors
+#' Extract Word Vectors From Current Vector File
 #'
 #' This function provides a more convenient wrapper for \code{extract_words}.
+#' It uses the current vector file, whose location can be found using
+#' \code{\link{cbn_get_vectorfile_location}} and assigned with
+#' \code{\link{cbn_set_vectorfile_location}}.
 #'
 #' @param words words to get vectors for
 #' @param verbose whether to report on progress
@@ -110,7 +136,7 @@ cbn_get_vectorfile_location <- function(){
 #' @return a matrix with word vectors as rows
 #' @export
 cbn_extract_word_vectors <- function(words, verbose = FALSE, report_every = 100000){
-  loc <- cbn_get_vectorfile_location()
+  loc <- cbn_get_vectorfile_location() # stops if none is set
   mat <- cbn:::extract_words(words, vectors_file = loc, verbose = verbose,
                             report_every = report_every)
   mat
