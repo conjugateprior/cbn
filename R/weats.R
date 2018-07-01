@@ -27,13 +27,13 @@ NULL
 
 #' Vectors for All Items Used in All Studies
 #'
-#' Extracted from the 840B word 300-dimensional vector Common Crawl
-#' data (downloaded on Jun 30th, 2018).
+#' A 457 x 300 matrix of (row) vectors for all study items,
+#' extracted from the 840B word Common Crawl data on Jun 30th, 2018.
 #'
 #' @source J. Pennington, R. Socher, and C. D. Manning (2014)
 #'         'GloVe: Global vectors for word representation'
 #'         \url{https://nlp.stanford.edu/projects/glove/}.
-"cbn_items"
+"cbn_item_vectors"
 
 #' Get the Items from a Study
 #'

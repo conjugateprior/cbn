@@ -6,7 +6,7 @@
 \alias{cbn-package}
 \title{CBN}
 \source{
-Caliskan, Bryson, and Narayanan (2017). 'Semantics derived
+A. Caliskan, J. J. Bryson, and A. Narayanan (2017) 'Semantics derived
         automatically from language corpora contain human-like biases'
         \emph{Science}. 356:6334 \url{http://doi.org/10.1126/science.aal4230}.
 }
