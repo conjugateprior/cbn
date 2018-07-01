@@ -14,11 +14,11 @@
 #' @importFrom Rcpp sourceCpp
 NULL
 
-#' CBN Items
+#' All Items Used in All Studies
 #'
 #' This data frame contains all the items used in all the studies.
-#' It is the data source for \code{get_study_items} and \code{get_items}.
-#' Most of the time you should probably use them.
+#' It is the data source for \code{cbn_get_items}.
+#' Most of the time you should probably use that.
 #'
 #' @source Caliskan, Bryson, and Narayanan (2017). 'Semantics derived
 #'         automatically from language corpora contain human-like biases'
@@ -28,25 +28,24 @@ NULL
 
 #' Get the Items from a Study
 #'
-#' @param study_type WEAT (default) or WEFAT
-#' @param number study number (default: 1)
-#' @return a data frame of items in columns
+#' Returns a data frame containing the items from any of the studies
+#' (WEAT1 through WEAT10 or WEFAT1 or WEFAT2) or a vector containing
+#' all items from all studies if \code{type} == "all".
+#'
+#' @param type "all" (the default), "WEAT", or "WEFAT"
+#' @param number study number (default: 1) Ignored if \code{type} = "all"
+#' @return a data frame of items in columns or a vector of all items
 #' @export
-get_study_items <- function(study_type = c("WEAT", "WEFAT"), number = 1){
+cbn_get_items <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
   study_type <- match.arg(study_type)
+  if (study_type == "all") {
+    its <- sort(as.vector(na.omit(unique(unlist(cbn::cbn_items[,-1])))))
+    return(its)
+  }
   sname <- paste0(study_type, number)
   df <- cbn::cbn_items[cbn::cbn_items$Study == sname, ]
   data.frame(Filter(function(x){ !all(is.na(x)) }, df))
 }
-
-#' Get All the Study Items
-#'
-#' @return a vector of all items from all studies
-#' @export
-get_items <- function(){
-  sort(as.vector(na.omit(unique(unlist(cbn::cbn_items[,-1])))))
-}
-
 
 #' Set the Location of the Vectors File
 #'
@@ -57,7 +56,7 @@ get_items <- function(){
 #' @param f path where you unzipped your vectors file
 #' @return Nothing
 #' @export
-set_vectors_location <- function(f){
+cbn_set_vectorfile_location <- function(f){
   f <- normalizePath(f)
   if (file.exists(f))
     Sys.setenv(VECTORS_LOC = f)
@@ -76,7 +75,7 @@ set_vectors_location <- function(f){
 #'
 #' @return a full path to the vectors file
 #' @export
-vectors_location <- function(){
+cbn_get_vectorfile_location <- function(){
   cc_loc <- Sys.getenv("VECTORS_LOC")
   if (is.null(cc_loc))
     stop("Location unkown: use set_vectors_file to assign it")
@@ -84,6 +83,22 @@ vectors_location <- function(){
     cc_loc
 }
 
+#' Extract Word Vectors
+#'
+#' This function provides a more convenient wrapper for \code{extract_words}.
+#'
+#' @param words words to get vectors for
+#' @param verbose whether to report on progress
+#' @param report_every how often to check in to see if we should stop
+#'
+#' @return a matrix with word vectors as rows
+#' @export
+cbn_extract_word_vectors <- function(words, verbose = FALSE, report_every = 100000){
+  loc <- get_vectors_location()
+  mat <- extract_words(words, vectors_file = loc, verbose = verbose,
+                       report_every = report_every)
+  mat
+}
 
 .onUnload <- function(libpath) {
   library.dynam.unload("cbn", libpath)

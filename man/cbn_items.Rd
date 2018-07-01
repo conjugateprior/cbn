@@ -3,7 +3,7 @@
 \docType{data}
 \name{cbn_items}
 \alias{cbn_items}
-\title{CBN Items}
+\title{All Items Used in All Studies}
 \format{An object of class \code{data.frame} with 333 rows and 28 columns.}
 \source{
 Caliskan, Bryson, and Narayanan (2017). 'Semantics derived
@@ -15,7 +15,7 @@ cbn_items
 }
 \description{
 This data frame contains all the items used in all the studies.
-It is the data source for \code{get_study_items} and \code{get_items}.
-Most of the time you should probably use them.
+It is the data source for \code{cbn_get_items}.
+Most of the time you should probably use that.
 }
 \keyword{datasets}
