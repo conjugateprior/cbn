@@ -163,7 +163,7 @@ cbn_extract_word_vectors <- function(words, verbose = FALSE, report_every = 1000
 #' @export
 cbn_cosine <- function(x, y = NULL){
   if (is.matrix(x) && is.null(y)) {
-    co = array(0, c(ncol(x), ncol(x)))
+    co = array(0, c(nrow(x), nrow(x)))
     f = colnames(x)
     dimnames(co) = list(f, f)
     for (i in 2:nrow(x)) {
@@ -177,7 +177,7 @@ cbn_cosine <- function(x, y = NULL){
   } else if (is.vector(x) && is.vector(y)) {
     return(crossprod(x, y)/sqrt(crossprod(x) * crossprod(y)))
   } else if (is.vector(x) && is.matrix(y)) {
-    co = vector(mode = "numeric", length = ncol(y))
+    co = vector(mode = "numeric", length = nrow(y))
     names(co) = colnames(y)
     for (i in 1:nrow(y)) {
       co[i] = cbn_cosine(x, y[i, ])
