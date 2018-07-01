@@ -142,6 +142,52 @@ cbn_extract_word_vectors <- function(words, verbose = FALSE, report_every = 1000
   mat
 }
 
+
+#' Calculates Cosine Similarity Between Matrix Rows
+#'
+#' This function calculates the cosine similarity matrix between all
+#' rows of a matrix \code{x}. When \code{x} and \code{y} are vectors
+#' it calculates the cosine similarity between them.  When \code{x}
+#' is a vector and \code{y} is a matrix it calculates the cosine
+#' between \code{x} and each rows of \code{y}.
+#'
+#' This code is taken directly from the \code{lsa} package but adjusted to
+#' operate rowwise.
+#'
+#' @param x A vector or a matrix (e.g., a document-term matrix).
+#' @param y A vector with compatible dimensions to x. If NULL, use all columns of \code{x}.
+#' @source The original code is from the \code{lsa::cosine} by
+#'         Fridolin Wild (f.wild@open.ac.uk).
+#' @return A ncol(x) by ncol(x) matrix of cosine similarities or a
+#' @export
+cbn_cosine <- function(x, y = NULL){
+  if (is.matrix(x) && is.null(y)) {
+    co = array(0, c(ncol(x), ncol(x)))
+    f = colnames(x)
+    dimnames(co) = list(f, f)
+    for (i in 2:nrow(x)) {
+      for (j in 1:(i - 1)) {
+        co[i, j] = cbn_cosine(x[i, ], x[j, ])
+      }
+    }
+    co = co + t(co)
+    diag(co) = 1
+    return(as.matrix(co))
+  } else if (is.vector(x) && is.vector(y)) {
+    return(crossprod(x, y)/sqrt(crossprod(x) * crossprod(y)))
+  } else if (is.vector(x) && is.matrix(y)) {
+    co = vector(mode = "numeric", length = ncol(y))
+    names(co) = colnames(y)
+    for (i in 1:nrow(y)) {
+      co[i] = cbn_cosine(x, y[i, ])
+    }
+    return(co)
+  } else {
+    stop("Either one matrix, a vector and a matrix, or two vectors needed as input")
+  }
+}
+
+
 .onUnload <- function(libpath) {
   library.dynam.unload("cbn", libpath)
 }
