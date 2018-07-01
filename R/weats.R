@@ -4,7 +4,7 @@
 #' replicate Caliskan, Bryson, and Narayanan (2017). 'Semantics derived
 #'         automatically from language corpora contain human-like biases'
 #'
-#' @source Caliskan, Bryson, and Narayanan (2017). 'Semantics derived
+#' @source A. Caliskan, J. J. Bryson, and A. Narayanan (2017) 'Semantics derived
 #'         automatically from language corpora contain human-like biases'
 #'         \emph{Science}. 356:6334 \url{http://doi.org/10.1126/science.aal4230}.
 #'
@@ -20,11 +20,20 @@ NULL
 #' It is the data source for \code{cbn_get_items}.
 #' Most of the time you should probably use that.
 #'
-#' @source Caliskan, Bryson, and Narayanan (2017). 'Semantics derived
+#' @source A. Caliskan, J. J. Bryson, and A. Narayanan (2017) 'Semantics derived
 #'         automatically from language corpora contain human-like biases'
 #'         \emph{Science}. 356:6334 \url{http://doi.org/10.1126/science.aal4230}.
 "cbn_items"
 
+#' Vectors for All Items Used in All Studies
+#'
+#' Extracted from the 840B word 300-dimensional vector Common Crawl
+#' data (downloaded on Jun 30th, 2018).
+#'
+#' @source J. Pennington, R. Socher, and C. D. Manning (2014)
+#'         'GloVe: Global vectors for word representation'
+#'         \url{https://nlp.stanford.edu/projects/glove/}.
+"cbn_items"
 
 #' Get the Items from a Study
 #'
@@ -37,7 +46,7 @@ NULL
 #' @return a data frame of items in columns or a vector of all items
 #' @export
 cbn_get_items <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
-  study_type <- match.arg(study_type)
+  study_type <- match.arg(type)
   if (study_type == "all") {
     its <- sort(as.vector(na.omit(unique(unlist(cbn::cbn_items[,-1])))))
     return(its)
@@ -95,7 +104,7 @@ cbn_get_vectorfile_location <- function(){
 #' @export
 cbn_extract_word_vectors <- function(words, verbose = FALSE, report_every = 100000){
   loc <- cbn_get_vectorfile_location()
-  mat <- cbn::extract_words(words, vectors_file = loc, verbose = verbose,
+  mat <- cbn:::extract_words(words, vectors_file = loc, verbose = verbose,
                             report_every = report_every)
   mat
 }
