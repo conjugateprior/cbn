@@ -5,7 +5,7 @@ How to install in a way that makes sure the vignettes viewable.
 In RStudio:
 
 * File Menu > New Project > Version Control > Git 
-* Set the repository name to 
+* Set the repository name to `https://github.com/conjugateprior/cbn.git`
 * Give it a local name 
 * check bottom left to open in a new R session
 
