@@ -52,3 +52,77 @@ ggplot(ff, aes(x = diff, y = 1:nrow(ff), label = Careers)) +
   xlim(-0.2, 0.2) +
   ylab("Careers") +
   xlab("Cosine difference (male - female)")
+
+# WEFAT more efficiently with bootstrapped items
+# cosine of x to a - cosine of x to
+wefat_boot <- function(items, vectors, x_name, a_name, b_name,
+                       b = 300, se.calc = c("sd", "quantile")){
+  se.calc <- match.arg(se.calc)
+  x_words <- items$Word[items$Condition == x_name]
+  x_vecs <- vectors[x_words, ]
+  repl <- matrix(NA, nrow = length(x_words), ncol = b)
+  # point estimate
+  a_v <- vectors[items$Condition == a_name,]
+  b_v <- vectors[items$Condition == b_name,]
+  orig_a <- cbn_cosine(colMeans(a_v), x_vecs)
+  orig_b <- cbn_cosine(colMeans(b_v), x_vecs)
+  orig <- orig_a - orig_b
+
+  for (i in 1:b) {
+    a_repl <- a_v[sample(1:nrow(a_v), replace = TRUE), ]
+    b_repl <- b_v[sample(1:nrow(b_v), replace = TRUE), ]
+    sims_a <- cbn_cosine(colMeans(a_repl), x_vecs)
+    sims_b <- cbn_cosine(colMeans(b_repl), x_vecs)
+    # statistic: difference of cosines
+    repl[, i] <- sims_a - sims_b
+  }
+  if (se.calc == "sd") {
+    se <- apply(repl, 1, sd)
+    tmp <- matrix(c(orig - 2 * se, orig + 2 * se), ncol = 2)
+  } else {
+    tmp <- t(apply(repl, 1, quantile, probs = c(0.025, 0.975)))
+  }
+  names(tmp) <- c("lwr", "upr")
+
+  df <- data.frame(x = x_words, diff = orig, tmp)
+  if (se.calc == "quantile")
+    df$median <- apply(repl, 1, median)
+
+  colnames(df)[1:4] <- c(x_name, "diff", "lwr", "upr")
+  df <- df[order(df$diff), ]
+  rownames(df) <- NULL
+  df
+}
+
+its <- cbn_get_items("WEFAT", 1)
+ff1 <- wefat1(its, cbn_item_vectors[its$Word, ],
+              "Careers", "MaleAttributes", "FemaleAttributes",
+              se.calc = "quantile")
+
+# Plot
+ggplot(ff1, aes(x = median, y = 1:nrow(ff1))) +
+  geom_point(col = "grey") +
+  geom_point(aes(x = diff)) +
+  geom_errorbarh(aes(xmin = lwr, xmax = upr), height = 0) +
+  geom_text(aes(x = upr, label = Careers), hjust = "left", nudge_x = 0.005) +
+  xlim(-0.25, 0.25) +
+  ylab("Careers") +
+  xlab("Cosine difference (male - female)")
+
+
+# AndrogynousNames
+
+its <- cbn_get_items("WEFAT", 2)
+ff1 <- wefat1(its, cbn_item_vectors[its$Word, ],
+              "AndrogynousNames", "MaleAttributes", "FemaleAttributes",
+              se.calc = "quantile")
+
+# Plot
+ggplot(ff1, aes(x = median, y = 1:nrow(ff1))) +
+  geom_point(col = "grey") +
+  geom_point(aes(x = diff)) +
+  geom_errorbarh(aes(xmin = lwr, xmax = upr), height = 0) +
+  geom_text(aes(x = upr, label = AndrogynousNames), hjust = "left", nudge_x = 0.005) +
+  xlim(-0.25, 0.25) +
+  ylab("Androgynous Names") +
+  xlab("Cosine difference (male - female)")

@@ -1,0 +1,68 @@
+---
+title: "Replication replication"
+author: "Will Lowe"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 7
+    fig_height: 7 
+vignette: >
+  %\VignetteIndexEntry{Replication replication}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Replicating WEFAT
+
+Here we'll get some WEFAT analyses going.  I haven't implemented the 
+sample permutation test that's in the paper yet, so we'll use the simple
+bootstrapping technique in `wefat_boot` and make a picture.
+
+First we load up the package
+```{r}
+library(cbn)
+
+library(ggplot2)
+theme_set(theme_minimal())
+```
+
+Then grab the items from the first WEFAT study and the vectors corresponding to 
+those words
+```{r}
+its <- cbn_get_items("WEFAT", 1)
+its
+its_vecs <- cbn_item_vectors[its$Word, ]
+dim(its_vecs)
+```
+Now to run get bootstrapped differences of cosines
+```{r}
+res <- wefat_boot(its, its_vecs, x_name = "Careers",
+                  a_name = "MaleAttributes", b_name = "FemaleAttributes",
+                  se.calc = "quantile")
+
+head(res)
+```
+This is a bit hard to interpret, so we'll make a picture
+
+```{r}
+ggplot(res, aes(x = median, y = 1:nrow(ff1))) +
+  geom_point(col = "grey") +
+  geom_point(aes(x = diff)) +
+  geom_errorbarh(aes(xmin = lwr, xmax = upr), height = 0) +
+  geom_text(aes(x = upr, label = Careers), hjust = "left", nudge_x = 0.005) +
+  xlim(-0.25, 0.25) +
+  ylab("Careers") +
+  xlab("Cosine difference (male - female)")
+```
+
+This will work quite generally for WEFATs, but remember to mention the 
+right condition name in `geom_text`.
+
+
