@@ -52,7 +52,7 @@ head(res)
 This is a bit hard to interpret, so we'll make a picture
 
 ```{r}
-ggplot(res, aes(x = median, y = 1:nrow(ff1))) +
+ggplot(res, aes(x = median, y = 1:nrow(res))) +
   geom_point(col = "grey") +
   geom_point(aes(x = diff)) +
   geom_errorbarh(aes(xmin = lwr, xmax = upr), height = 0) +
