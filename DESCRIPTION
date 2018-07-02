@@ -11,11 +11,12 @@ Encoding: UTF-8
 LazyData: true
 ByteCompile: true
 Depends: R (>= 2.10)
-Imports: readr,
-    Rcpp
+Imports: Rcpp,
+  gender,
+  genderdata
 LinkingTo: Rcpp
 RoxygenNote: 6.0.1
 Suggests: knitr,
-    rmarkdown,
-    ggplot2
+  rmarkdown,
+  ggplot2
 VignetteBuilder: knitr

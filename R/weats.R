@@ -36,6 +36,22 @@ NULL
 #'
 "LIWC2001"
 
+#' Gender Proportions for Names in the US Population
+#'
+#' This data set contains for each name used in the study items, its
+#' the gender proportions in the US population. It was generated
+#' by the \code{gender} package, which uses US Social Security
+#' Administration data.
+#'
+#' The columns of the data set are \code{name}, the name,
+#' \code{proportion_male} and \code{proportion_female}, gender (a best guess
+#' from the proportions), and the years within which the SSA search was
+#' performed.  This data set can merged with several of the study item sets,
+#' but is most useful for replicating the second WEFAT study, as shown in the
+#' replication vignette.
+#'
+"cbn_gender_name_stats"
+
 #' All Items Used in All Studies
 #'
 #' This data frame contains all the items used in all the studies.

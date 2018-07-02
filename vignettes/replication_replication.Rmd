@@ -65,4 +65,52 @@ ggplot(res, aes(x = median, y = 1:nrow(res))) +
 This will work quite generally for WEFATs, but remember to mention the 
 right condition name in `geom_text`.
 
+## The Gender of Androgenous Names
 
+First we get the vector differences
+```{r}
+its <- cbn_get_items("WEFAT", 2)
+its_vecs <- cbn_item_vectors[its$Word, ]
+res <- wefat_boot(its, its_vecs, x_name = "AndrogynousNames",
+                  a_name = "MaleAttributes", b_name = "FemaleAttributes",
+                  se.calc = "quantile")
+```
+Then we find the gender proportions for each name from the census.  
+This is most easily done using the `gender` package, which queries the US 
+Social Security Administration to get the proportion of stated males and females 
+with any particular first name.  
+
+This data is bundled with the package, so we'll join this to `res`
+```{r}
+data(cbn_gender_name_stats)
+head(cbn_gender_name_stats)
+
+res <- merge(res, cbn_gender_name_stats, 
+             by.x = "AndrogynousNames", by.y = "name")
+```
+If you want to do it yourself, e.g. to look at gender over different time 
+periods, or use a different gender source, then 
+```{r, eval = FALSE}
+library(gender)
+
+names <- c("Hugh", "Pugh", "Barney")
+gender_name_stats <- gender(names)
+```
+and replace `cbn_gender_name_stats` with `gender_name_stats`.
+
+To see how they relate, we'll plot proportion male with the `diff` column of
+`res`
+```{r}
+ggplot(res, aes(x = proportion_male, y = diff)) +
+  geom_hline(yintercept = 0, alpha = 0.5, color = "grey") + 
+  geom_point() +
+  geom_text(aes(label = AndrogynousNames), hjust = "left", nudge_x = 0.005) +
+  xlim(0, 1) +
+  xlab("Population proportion male") +
+  ylab("Cosine difference (male - female)")
+```
+
+The correlation is
+```{r}
+cor.test(res$diff,res$proportion_male)
+```
