@@ -39,7 +39,7 @@ Grab the items from the first WEAT study and the vectors corresponding to
 those words
 ```{r}
 its <- cbn_get_items("WEAT", 1)
-its
+head(its)
 its_vecs <- cbn_get_item_vectors("WEAT", 1)
 dim(its_vecs)
 ```
