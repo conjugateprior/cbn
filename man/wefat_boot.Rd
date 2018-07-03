@@ -44,29 +44,34 @@ e.g. "MaleAttributes" and the mean vector from condition \code{b_name},
 e.g. "FemaleAttributes".
 }
 \details{
-Uncertainty is quantified by bootstrapping each set
-item vectors. That is, for each of the \code{b} bootstrap samples,
+Uncertainty is quantified by bootstrapping each set of
+item vectors. That is, in each of the \code{b} bootstrap samples,
 vectors in the \code{a_name} condition and
 vectors in the \code{b_name} condition are
-resampled (independently) with replacement, and the difference of cosines
-statstic is recomputed.  The bootstrap sampling distribution of the
-statistic is summarized by an approximate
-95% confidence interval defined as twice the standard deviation of the
+resampled (independently) with replacement, and the difference between
+the cosine of a target word and the mean of the \code{a_name}
+vectors and cosine of a target word and the mean of the \code{b_name}
+is recorded.  The bootstrap sampling distribution of this difference of
+cosines statistic is summarized in the outpu by an approximate
+95% confidence interval defined as either twice the standard deviation of the
 statistic across bootstrap samples if \code{se.calc} is "sd", or as the
-0.025 and 0.975 quantiles of the statistic if \code{se.calc} is "quantile".
+0.025 and 0.975 quantiles of the bootstrap sampling distribution
+if \code{se.calc} is "quantile".
 
 If \code{se.calc} is "quantile" the data frame returned has an extra column
-with the median of the statistic in the bootstrap samples. This should not
+containing the median of the statistic in the bootstrap samples. This should not
 be too far from the original statistic.
 
 The output of this function is sorted by the value of the difference of
 cosines statistic. This direction is arbitrary, but if you wish to reverse
 the ordering just swap the values of \code{a_name} for \code{b_name} when
 calling it.
+
+Note that this is not the statistic reported in the original paper.
 }
 \examples{
 its <- cbn_get_items("WEFAT", 1)
-its_vecs <- cbn_item_vectors[its$Word, ]
+its_vecs <- cbn_get_item_vectors("WEFAT", 1)
 res <- wefat_boot(its, its_vecs, x_name = "Careers",
                   a_name = "MaleAttributes", b_name = "FemaleAttributes",
                   se.calc = "quantile")

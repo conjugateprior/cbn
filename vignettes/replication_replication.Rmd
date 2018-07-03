@@ -19,13 +19,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Replicating WEFAT
-
-Here we'll get some WEFAT analyses going.  I haven't implemented the 
+Here we'll try to get some analyses going.  I haven't implemented the 
 sample permutation test that's in the paper yet, so we'll use the simple
-bootstrapping technique in `wefat_boot` and make a picture.
+bootstrapping techniques in `weat_boot` and `wefat_boot`.
 
-First we load up the package
+First we load up the package and arrange the graphics
 ```{r}
 library(cbn)
 
@@ -33,22 +31,45 @@ library(ggplot2)
 theme_set(theme_minimal())
 ```
 
-Then grab the items from the first WEFAT study and the vectors corresponding to 
+## Replicating WEAAT
+
+Are flowers more pleasant than insects?
+
+Grab the items from the first WEAT study and the vectors corresponding to 
 those words
 ```{r}
-its <- cbn_get_items("WEFAT", 1)
+its <- cbn_get_items("WEAT", 1)
 its
-its_vecs <- cbn_item_vectors[its$Word, ]
+its_vecs <- cbn_get_item_vectors("WEAT", 1)
 dim(its_vecs)
 ```
-Now to run get bootstrapped differences of cosines
+
+Now get a bootstrapped difference of differences of cosines
+```{r}
+res <- weat_boot(its, its_vecs, 
+                 x_name = "Flowers", y_name = "Insects",
+                 a_name = "Pleasant", b_name = "Unpleasant",
+                 se.calc = "quantile")
+res
+```
+Apparently flowers are more pleasant than insects.
+
+## Replicating WEFAT
+
+Same as before to get items and vectors
+```{r}
+its <- cbn_get_items("WEFAT", 1)
+its_vecs <- cbn_get_item_vectors("WEFAT", 1)
+```
+Now to get bootstrapped differences of cosines. Note that there is no `y_name` this
+time and we will get a statistic for each `x_name`.
 ```{r}
 res <- wefat_boot(its, its_vecs, x_name = "Careers",
                   a_name = "MaleAttributes", b_name = "FemaleAttributes",
                   se.calc = "quantile")
-
 head(res)
 ```
+
 This is a bit hard to interpret, so we'll make a picture
 
 ```{r}
@@ -65,12 +86,15 @@ ggplot(res, aes(x = median, y = 1:nrow(res))) +
 This will work quite generally for WEFATs, but remember to mention the 
 right condition name in `geom_text`.
 
+I don't have the male / female proportions for different jobs, so we can't 
+compare them right now.
+
 ## The Gender of Androgenous Names
 
 First we get the vector differences
 ```{r}
 its <- cbn_get_items("WEFAT", 2)
-its_vecs <- cbn_item_vectors[its$Word, ]
+its_vecs <- cbn_get_item_vectors("WEFAT", 2)
 res <- wefat_boot(its, its_vecs, x_name = "AndrogynousNames",
                   a_name = "MaleAttributes", b_name = "FemaleAttributes",
                   se.calc = "quantile")

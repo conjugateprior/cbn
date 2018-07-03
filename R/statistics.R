@@ -9,25 +9,30 @@
 #' e.g. "MaleAttributes" and the mean vector from condition \code{b_name},
 #' e.g. "FemaleAttributes".
 #'
-#' Uncertainty is quantified by bootstrapping each set
-#' item vectors. That is, for each of the \code{b} bootstrap samples,
+#' Uncertainty is quantified by bootstrapping each set of
+#' item vectors. That is, in each of the \code{b} bootstrap samples,
 #' vectors in the \code{a_name} condition and
 #' vectors in the \code{b_name} condition are
-#' resampled (independently) with replacement, and the difference of cosines
-#' statstic is recomputed.  The bootstrap sampling distribution of the
-#' statistic is summarized by an approximate
-#' 95% confidence interval defined as twice the standard deviation of the
+#' resampled (independently) with replacement, and the difference between
+#' the cosine of a target word and the mean of the \code{a_name}
+#' vectors and cosine of a target word and the mean of the \code{b_name}
+#' is recorded.  The bootstrap sampling distribution of this difference of
+#' cosines statistic is summarized in the outpu by an approximate
+#' 95% confidence interval defined as either twice the standard deviation of the
 #' statistic across bootstrap samples if \code{se.calc} is "sd", or as the
-#' 0.025 and 0.975 quantiles of the statistic if \code{se.calc} is "quantile".
+#' 0.025 and 0.975 quantiles of the bootstrap sampling distribution
+#' if \code{se.calc} is "quantile".
 #'
 #' If \code{se.calc} is "quantile" the data frame returned has an extra column
-#' with the median of the statistic in the bootstrap samples. This should not
+#' containing the median of the statistic in the bootstrap samples. This should not
 #' be too far from the original statistic.
 #'
 #' The output of this function is sorted by the value of the difference of
 #' cosines statistic. This direction is arbitrary, but if you wish to reverse
 #' the ordering just swap the values of \code{a_name} for \code{b_name} when
 #' calling it.
+#'
+#' Note that this is not the statistic reported in the original paper.
 #'
 #' @param items information about the items, typically from
 #'              \code{\link{cbn_get_items}}
@@ -50,10 +55,11 @@
 #'         the fifth column is the median value of the statistic across
 #'         bootstrap samples. The data frame is sorted by the second column.
 #' @export
+#' @importFrom stats median quantile sd
 #'
 #' @examples
 #' its <- cbn_get_items("WEFAT", 1)
-#' its_vecs <- cbn_item_vectors[its$Word, ]
+#' its_vecs <- cbn_get_item_vectors("WEFAT", 1)
 #' res <- wefat_boot(its, its_vecs, x_name = "Careers",
 #'                   a_name = "MaleAttributes", b_name = "FemaleAttributes",
 #'                   se.calc = "quantile")
@@ -92,6 +98,126 @@ wefat_boot <- function(items, vectors, x_name, a_name, b_name,
 
   colnames(df)[1:4] <- c(x_name, "diff", "lwr", "upr")
   df <- df[order(df$diff), ]
+  rownames(df) <- NULL
+  df
+}
+
+#' WEFAT via simple item bootstrap
+#'
+#' A simple bootstrap for the WEAT calculations.  The statistic
+#' of interest is an average difference of average differences.
+#'
+#' Schematically, the statistic is the average value of
+#'
+#' (cosine(x names, a words) - cosine(x names, b words)) -
+#' (cosine(y names, a words) - cosine(y names, b words))
+#'
+#' If a denotes a set of 'Pleasant' and b denotes a set of 'Unpleasant' words,
+#' x are names of 'Insects', and y are names of 'Flowers' (as in WEAT 1)
+#' then the statistic will take positive values when flowers are more pleasant
+#' than insects. That is, when the degree to which flower names are more similar
+#' to pleasant versus unpleasant words is stronger than the degree to which
+#' insect names are more similar to pleasant versus unpleasant words.
+#'
+#' Uncertainty is quantified by bootstrapping each set of
+#' item vectors. That is, in each of the \code{b} bootstrap samples,
+#' vectors in each condition (\code{a_name}, \code{b_name},
+#' \code{x_name} and \code{y_name}) are
+#' separately resampled with replacement, and the statistic is
+#' computed.  The bootstrap sampling distribution of this statistic
+#' is summarized in the outpu by an approximate
+#' 95% confidence interval defined as either twice the standard deviation of the
+#' statistic across bootstrap samples if \code{se.calc} is "sd", or as the
+#' 0.025 and 0.975 quantiles of the bootstrap sampling distribution
+#' if \code{se.calc} is "quantile".
+#'
+#' If \code{se.calc} is "quantile" the data frame returned has an extra column
+#' containing the median of the statistic in the bootstrap samples. This should not
+#' be too far from the original statistic.
+#'
+#' The sign of the statistic is arbitrary. If you wish to reverse
+#' the ordering just swap the values of \code{a_name} for \code{b_name}
+#' or \code{x_name} and \code{y_name} when calling it.
+#'
+#' Note that this is not the statistic reported in the original paper.
+#'
+#' @param items information about the items, typically from
+#'              \code{\link{cbn_get_items}}
+#' @param vectors a matrix of word vectors for all the study items
+#' @param x_name the \emph{name} of the target item condition, e.g. "Flowers"
+#'               in WEAT 1
+#' @param y_name the \emph{name} of the target item condition, e.g. "Insects"
+#'               in WEAT 1
+#' @param a_name the name of the first condition, e.g. "Pleasant" in
+#'               WEAT 1
+#' @param b_name the name of the second condition, e.g. "Unpleasant" in
+#'               WEAT 1
+#' @param b number of bootstrap samples. Defaults to 300.
+#' @param se.calc how to compute lower and upper bounds on an approximate 95%
+#'                interval for the difference of differences of cosines statistic.
+#'                "se" (default) or "quantile".
+#'
+#' @return a data frame with first column the
+#'         difference of differences of cosines statistic, the second and third
+#'         columns the lower and upper bounds of an approximate 95% confidence
+#'         interval from the bootstrapped statistic.  If \code{se.calc} is "quantile",
+#'         the fourth column is the median value of the statistic across
+#'         bootstrap samples.
+#' @export
+#' @importFrom stats median quantile sd
+#'
+#' @examples
+#' its <- cbn_get_items("WEAT", 1)
+#' its_vecs <- cbn_get_item_vectors("WEAT", 1)
+#' res <- weat_boot(its, its_vecs,
+#'                  x_name = "Pleasant", y_name= "Unpleasant",
+#'                  a_name = "Flowers", b_name = "Insects",
+#'                  se.calc = "quantile")
+#' res
+weat_boot <- function(items, vectors, x_name, y_name, a_name, b_name,
+                      b = 300, se.calc = c("sd", "quantile")){
+  se.calc <- match.arg(se.calc)
+  x_words <- items$Word[items$Condition == x_name]
+  x_vecs <- vectors[x_words, ]
+  y_words <- items$Word[items$Condition == y_name]
+  y_vecs <- vectors[y_words, ]
+  a_v <- vectors[items$Condition == a_name, ]
+  b_v <- vectors[items$Condition == b_name, ]
+
+  # point estimate
+  orig_ax <- mean(cbn_cosine(colMeans(a_v), x_vecs))
+  orig_bx <- mean(cbn_cosine(colMeans(b_v), x_vecs))
+  orig_ay <- mean(cbn_cosine(colMeans(a_v), y_vecs))
+  orig_by <- mean(cbn_cosine(colMeans(b_v), y_vecs))
+  orig <- (orig_ax - orig_bx) - (orig_ay - orig_by)
+
+  reps <- rep(NA, b)
+  for (i in 1:b) {
+    # resample everything independently
+    a_repl <- a_v[sample(1:nrow(a_v), replace = TRUE), ]
+    b_repl <- b_v[sample(1:nrow(b_v), replace = TRUE), ]
+    x_repl <- x_vecs[sample(1:nrow(x_vecs), replace = TRUE), ]
+    y_repl <- y_vecs[sample(1:nrow(y_vecs), replace = TRUE), ]
+
+    repl_ax <- mean(cbn_cosine(colMeans(a_repl), x_repl))
+    repl_bx <- mean(cbn_cosine(colMeans(b_repl), x_repl))
+    repl_ay <- mean(cbn_cosine(colMeans(a_repl), y_repl))
+    repl_by <- mean(cbn_cosine(colMeans(b_repl), y_repl))
+    reps[i] <- (repl_ax - repl_bx) - (repl_ay - repl_by)
+  }
+
+  if (se.calc == "sd") {
+    se <- sd(reps) # just one row
+    df <- data.frame(diff = orig,
+                     lwr = orig - 2 * se,
+                     upr = orig + 2 * se)
+  } else {
+    qs <- quantile(reps, probs = c(0.025, 0.975))
+    df <- data.frame(diff = orig,
+                     lwr = qs[1],
+                     upr = qs[2],
+                     median = median(reps))
+  }
   rownames(df) <- NULL
   df
 }

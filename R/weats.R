@@ -80,9 +80,9 @@ NULL
 #'         \url{https://nlp.stanford.edu/projects/glove/}.
 "cbn_item_vectors"
 
-#' Get the Items from a Study
+#' Get the Items in a Study
 #'
-#' Returns a data frame containing the items from any of the studies
+#' Returns a data frame containing the items from one of the studies
 #' (WEAT1 through WEAT10 or WEFAT1 or WEFAT2) or a vector containing
 #' all items from all studies if \code{type} == "all".
 #'
@@ -97,6 +97,27 @@ cbn_get_items <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
   } else {
     sname <- paste0(study_type, number)
     cbn::cbn_items[cbn::cbn_items$Study == sname, ]
+  }
+}
+
+#' Get Vectors for Items in a Study
+#'
+#' Returns a matrix containing word vectors for the items used in one
+#' of the studies (WEAT1 through WEAT10 or WEFAT1 or WEFAT2).
+#' If \code{type} == "all" then vectors for all items used in any of the studies
+#' is returned. Words are rownames.
+#'
+#' @param type "all" (the default), "WEAT", or "WEFAT"
+#' @param number study number (default: 1) Ignored if \code{type} = "all"
+#' @return a matrix with word vectors as rows
+#' @export
+cbn_get_item_vectors <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
+  study_type <- match.arg(type)
+  if (study_type == "all") {
+    cbn::cbn_item_vectors
+  } else {
+    its <- cbn_get_items(type = type, number = number)
+    cbn::cbn_item_vectors[its$Word, ]
   }
 }
 

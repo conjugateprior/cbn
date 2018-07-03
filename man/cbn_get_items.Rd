@@ -2,7 +2,7 @@
 % Please edit documentation in R/weats.R
 \name{cbn_get_items}
 \alias{cbn_get_items}
-\title{Get the Items from a Study}
+\title{Get the Items in a Study}
 \usage{
 cbn_get_items(type = c("all", "WEAT", "WEFAT"), number = 1)
 }
@@ -15,7 +15,7 @@ cbn_get_items(type = c("all", "WEAT", "WEFAT"), number = 1)
 a data frame of items in columns or a vector of all items
 }
 \description{
-Returns a data frame containing the items from any of the studies
+Returns a data frame containing the items from one of the studies
 (WEAT1 through WEAT10 or WEFAT1 or WEFAT2) or a vector containing
 all items from all studies if \code{type} == "all".
 }
