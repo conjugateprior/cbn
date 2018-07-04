@@ -1,5 +1,5 @@
 ---
-title: "Replication replication"
+title: "Replication Replication"
 author: "Will Lowe"
 date: "`r Sys.Date()`"
 output: 
@@ -7,7 +7,7 @@ output:
     fig_width: 7
     fig_height: 7 
 vignette: >
-  %\VignetteIndexEntry{Replication replication}
+  %\VignetteIndexEntry{Replication Replication}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,122 +19,129 @@ knitr::opts_chunk$set(
 )
 ```
 
-Here we'll try to get some analyses going.  I haven't implemented the 
-sample permutation test that's in the paper yet, so we'll use the simple
-bootstrapping techniques in `weat_boot` and `wefat_boot`.
+## WEAT (Table 1)
 
-First we load up the package and arrange the graphics
-```{r}
-library(cbn)
+In the following we set the number of permuations to 1000.  This means that,
+although the point estimates should agree with the paper table the p values
+will be relatively imprecise.  To make them more precise change 1000 to a larger
+number and be prepared to wait a little longer.  In most cases the p values is
+less than 0.0001, so imprecision has no real implications for 
+statistical confidence.
 
-library(ggplot2)
-theme_set(theme_minimal())
-```
+### Flowers vs Insects
 
-## Replicating WEAAT
-
-Are flowers more pleasant than insects?
-
-Grab the items from the first WEAT study and the vectors corresponding to 
-those words
 ```{r}
 its <- cbn_get_items("WEAT", 1)
-head(its)
-its_vecs <- cbn_get_item_vectors("WEAT", 1)
-dim(its_vecs)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 1)
+weat_perm(its, vecs, x_name = "Flowers", y_name = "Insects", 
+          a_name = "Pleasant", b_name = "Unpleasant", 1000)
 ```
 
-Now get a bootstrapped difference of differences of cosines
-```{r}
-res <- weat_boot(its, its_vecs, 
-                 x_name = "Flowers", y_name = "Insects",
-                 a_name = "Pleasant", b_name = "Unpleasant",
-                 se.calc = "quantile")
-res
-```
-Apparently flowers are more pleasant than insects.
-
-## Replicating WEFAT
-
-Same as before to get items and vectors
-```{r}
-its <- cbn_get_items("WEFAT", 1)
-its_vecs <- cbn_get_item_vectors("WEFAT", 1)
-```
-Now to get bootstrapped differences of cosines. Note that there is no `y_name` this
-time and we will get a statistic for each `x_name`.
-```{r}
-res <- wefat_boot(its, its_vecs, x_name = "Careers",
-                  a_name = "MaleAttributes", b_name = "FemaleAttributes",
-                  se.calc = "quantile")
-head(res)
-```
-
-This is a bit hard to interpret, so we'll make a picture
+### Instruments vs Weapons
 
 ```{r}
-ggplot(res, aes(x = median, y = 1:nrow(res))) +
-  geom_point(col = "grey") +
-  geom_point(aes(x = diff)) +
-  geom_errorbarh(aes(xmin = lwr, xmax = upr), height = 0) +
-  geom_text(aes(x = upr, label = Careers), hjust = "left", nudge_x = 0.005) +
-  xlim(-0.25, 0.25) +
-  ylab("Careers") +
-  xlab("Cosine difference (male - female)")
+its <- cbn_get_items("WEAT", 2)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 2)
+weat_perm(its, vecs, x_name = "Instruments", y_name = "Weapons", 
+          a_name = "Pleasant", b_name = "Unpleasant", 1000)
 ```
 
-This will work quite generally for WEFATs, but remember to mention the 
-right condition name in `geom_text`.
+### European-American vs African-American Names (1)
 
-I don't have the male / female proportions for different jobs, so we can't 
-compare them right now.
-
-## The Gender of Androgenous Names
-
-First we get the vector differences
 ```{r}
-its <- cbn_get_items("WEFAT", 2)
-its_vecs <- cbn_get_item_vectors("WEFAT", 2)
-res <- wefat_boot(its, its_vecs, x_name = "AndrogynousNames",
-                  a_name = "MaleAttributes", b_name = "FemaleAttributes",
-                  se.calc = "quantile")
+its <- cbn_get_items("WEAT", 3)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 3)
+weat_perm(its, vecs, x_name = "EuropeanAmericanNames", 
+          y_name = "AfricanAmericanNames", 
+          a_name = "Pleasant", b_name = "Unpleasant", 1000)
 ```
-Then we find the gender proportions for each name from the census.  
-This is most easily done using the `gender` package, which queries the US 
-Social Security Administration to get the proportion of stated males and females 
-with any particular first name.  
 
-This data is bundled with the package, so we'll join this to `res`
+### European-American vs African-American Names (2)
+
 ```{r}
-data(cbn_gender_name_stats)
-head(cbn_gender_name_stats)
-
-res <- merge(res, cbn_gender_name_stats, 
-             by.x = "AndrogynousNames", by.y = "name")
+its <- cbn_get_items("WEAT", 4)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 4)
+weat_perm(its, vecs, x_name = "EuropeanAmericanNames", 
+          y_name = "AfricanAmericanNames", 
+          a_name = "Pleasant", b_name = "Unpleasant", 1000)
 ```
-If you want to do it yourself, e.g. to look at gender over different time 
-periods, or use a different gender source, then 
-```{r, eval = FALSE}
-library(gender)
 
-names <- c("Hugh", "Pugh", "Barney")
-gender_name_stats <- gender(names)
-```
-and replace `cbn_gender_name_stats` with `gender_name_stats`.
+### European-American vs African-American Names (3)
 
-To see how they relate, we'll plot proportion male with the `diff` column of
-`res`
 ```{r}
-ggplot(res, aes(x = proportion_male, y = diff)) +
-  geom_hline(yintercept = 0, alpha = 0.5, color = "grey") + 
-  geom_point() +
-  geom_text(aes(label = AndrogynousNames), hjust = "left", nudge_x = 0.005) +
-  xlim(0, 1) +
-  xlab("Population proportion male") +
-  ylab("Cosine difference (male - female)")
+its <- cbn_get_items("WEAT", 5)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 5)
+weat_perm(its, vecs, x_name = "EuropeanAmericanNames", 
+          y_name = "AfricanAmericanNames", 
+          a_name = "Pleasant", b_name = "Unpleasant", 1000)
 ```
 
-The correlation is
+### Male vs Female Names
+
 ```{r}
-cor.test(res$diff,res$proportion_male)
+its <- cbn_get_items("WEAT", 6)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 6)
+weat_perm(its, vecs, x_name = "MaleNames", y_name = "FemaleNames", 
+          a_name = "Career", b_name = "Family", 1000)
 ```
+
+### Math vs Arts
+
+```{r}
+its <- cbn_get_items("WEAT", 7)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 7)
+weat_perm(its, vecs, x_name = "Math", y_name = "Arts",
+           a_name = "MaleTerms", b_name = "FemaleTerms", 1000)
+```
+
+### Science vs Arts
+
+```{r}
+its <- cbn_get_items("WEAT", 8)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 8)
+weat_perm(its, vecs, x_name = "Science", y_name = "Arts", 
+           a_name = "MaleTerms", b_name = "FemaleTerms", 1000)
+```
+
+### Mental vs Physical Disease
+
+```{r}
+its <- cbn_get_items("WEAT", 9)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 9)
+weat_perm(its, vecs, x_name = "MentalDisease", y_name = "PhysicalDisease", 
+          a_name = "Temporary", b_name = "Permanent", 1000)
+```
+
+### Mental vs Physical Disease
+
+```{r}
+its <- cbn_get_items("WEAT", 9)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 9)
+weat_perm(its, vecs, x_name = "MentalDisease", y_name = "PhysicalDisease", 
+          a_name = "Temporary", b_name = "Permanent", 1000)
+```
+
+### Young vs Old People's Names
+
+```{r}
+its <- cbn_get_items("WEAT", 10)
+summary(its)
+vecs <- cbn_get_item_vectors("WEAT", 10)
+weat_perm(its, vecs, x_name = "YoungNames", y_name = "OldNames", 
+          a_name = "Pleasant", b_name = "Unpleasant", 1000)
+```
+ 
+## WEFAT (Figures 1 and 2)
+
+tba
+
