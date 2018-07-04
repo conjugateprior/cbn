@@ -119,11 +119,36 @@ NULL
 cbn_get_items <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
   study_type <- match.arg(type)
   if (study_type == "all") {
-    unique(cbn::cbn_items$Word)
+    its <- unique(cbn::cbn_items$Word)
   } else {
     sname <- paste0(study_type, number)
-    cbn::cbn_items[cbn::cbn_items$Study == sname, ]
+    its <- cbn::cbn_items[cbn::cbn_items$Study == sname, ]
+    class(its) <- c("cbn_study", class(its))
   }
+  its
+}
+
+
+#' Summary Method for Study Items
+#'
+#' A summary method for study items extracted via \code{\link{cbn_get_items}}.
+#'
+#' @param object A set of study items
+#' @param ... Ignored
+#' @return Condition names, roles (target or attribute) and N for study items
+#' @export
+#' @importFrom stats aggregate
+#'
+#' @examples
+#' its <- cbn_get_items("WEAT", 6)
+#' summary(its)
+#'
+summary.cbn_study <- function(object, ...){
+  s <- aggregate(Word ~ Condition + Role, data = object, FUN = length)
+  colnames(s)[3] <- "N"
+  cat(unique(object[,'Study']), "\n")
+  print.data.frame(s, row.names = FALSE)
+  invisible(s)
 }
 
 #' Get Vectors for Items in a Study
@@ -131,7 +156,7 @@ cbn_get_items <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
 #' Returns a matrix containing word vectors for the items used in one
 #' of the studies (WEAT1 through WEAT10 or WEFAT1 or WEFAT2).
 #' If \code{type} == "all" then vectors for all items used in any of the studies
-#' is returned. Words are rownames.
+#' is returned. Words are row names.
 #'
 #' @param type "all" (the default), "WEAT", or "WEFAT"
 #' @param number study number (default: 1) Ignored if \code{type} = "all"
@@ -140,11 +165,12 @@ cbn_get_items <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
 cbn_get_item_vectors <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
   study_type <- match.arg(type)
   if (study_type == "all") {
-    cbn::cbn_item_vectors
+    vecs <- cbn::cbn_item_vectors
   } else {
     its <- cbn_get_items(type = type, number = number)
-    cbn::cbn_item_vectors[its$Word, ]
+    vecs <- cbn::cbn_item_vectors[its$Word, ]
   }
+  vecs
 }
 
 #' Set the Location of the Vectors File

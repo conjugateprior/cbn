@@ -102,7 +102,7 @@ wefat_boot <- function(items, vectors, x_name, a_name, b_name,
   df
 }
 
-#' WEFAT via simple item bootstrap
+#' WEAT via simple item bootstrap
 #'
 #' A simple bootstrap for the WEAT calculations.  The statistic
 #' of interest is an average difference of average differences.
@@ -139,7 +139,9 @@ wefat_boot <- function(items, vectors, x_name, a_name, b_name,
 #' the ordering just swap the values of \code{a_name} for \code{b_name}
 #' or \code{x_name} and \code{y_name} when calling it.
 #'
-#' Note that this is not the statistic reported in the original paper.
+#' Note that this is not the statistic reported in the original paper.  This
+#' bootstraps within each target categories (x and y) and within each attribute
+#' category (a and b).
 #'
 #' @param items information about the items, typically from
 #'              \code{\link{cbn_get_items}}
@@ -170,8 +172,8 @@ wefat_boot <- function(items, vectors, x_name, a_name, b_name,
 #' its <- cbn_get_items("WEAT", 1)
 #' its_vecs <- cbn_get_item_vectors("WEAT", 1)
 #' res <- weat_boot(its, its_vecs,
-#'                  x_name = "Pleasant", y_name= "Unpleasant",
-#'                  a_name = "Flowers", b_name = "Insects",
+#'                  x_name = "Flowers", y_name = "Insects",
+#'                  a_name = "Pleasant", b_name= "Unpleasant",
 #'                  se.calc = "quantile")
 #' res
 weat_boot <- function(items, vectors, x_name, y_name, a_name, b_name,
@@ -221,3 +223,85 @@ weat_boot <- function(items, vectors, x_name, y_name, a_name, b_name,
   rownames(df) <- NULL
   df
 }
+
+#' WEAT Permutation Test
+#'
+#' The statistic computed by this function is the mean cosine
+#' similarity of each x item to the a attributes minus the mean cosine to the
+#' b attributes, summed over x items subtracted for the same quantity
+#' computed for the y items.  See the paper for details of the statistic,
+#' and the effect size.
+#'
+#' The p value is constructed by permuting the assignment of words to the x and
+#' y conditions. (The a and b attribute items are fixed.)  The p value is the
+#' proportion of times the statistic computed on the permuted labels is greater
+#' than the value of the statistic that is observed.
+#'
+#' @param items information about the items, typically from
+#'              \code{\link{cbn_get_items}}
+#' @param vectors a matrix of word vectors for all the study items, typically
+#'                from \code{\link{cbn_get_item_vectors}}
+#' @param x_name the \emph{name} of the target item condition, e.g. "Flowers"
+#'               in WEAT 1
+#' @param y_name the \emph{name} of the target item condition, e.g. "Insects"
+#'               in WEAT 1
+#' @param a_name the name of the first condition, e.g. "Pleasant" in
+#'               WEAT 1
+#' @param b_name the name of the second condition, e.g. "Unpleasant" in
+#'               WEAT 1
+#' @param b number of bootstrap samples. Defaults to 1000.
+#'
+#' @return a data frame with first column the
+#'         statistic, the second column the effect size, and the third column
+#'         permutation test p value.
+#' @export
+#' @importFrom stats sd
+#'
+#' @examples
+#' its <- cbn_get_items("WEAT", 1)
+#' its_vecs <- cbn_get_item_vectors("WEAT", 1)
+#' res <- weat_perm(its, its_vecs,
+#'                  x_name = "Flowers", y_name = "Insects",
+#'                  a_name = "Pleasant", b_name= "Unpleasant")
+#' res
+weat_perm <- function(items, vectors, x_name, y_name, a_name, b_name, b = 1000){
+
+  x_words <- items$Word[items$Condition == x_name]
+  y_words <- items$Word[items$Condition == y_name]
+  a_words <- items$Word[items$Condition == a_name]
+  b_words <- items$Word[items$Condition == b_name]
+
+  pre_cos <- cbn_cosine(vectors) # Compute just once
+
+  # point estimate straight from the paper
+  S_xab <- apply(pre_cos[x_words, a_words], 1, mean) -
+           apply(pre_cos[x_words, b_words], 1, mean)
+  S_yab <- apply(pre_cos[y_words, a_words], 1, mean) -
+           apply(pre_cos[y_words, b_words], 1, mean)
+  S_xy_denom <- apply(pre_cos[c(x_words, y_words), a_words], 1, mean) -
+                apply(pre_cos[c(x_words, y_words), b_words], 1, mean)
+  S_xyab <- sum(S_xab) - sum(S_yab)
+  effect <- (mean(S_xab) - mean(S_yab)) / sd(S_xy_denom)
+
+  lx <- length(x_words)
+  ly <- length(y_words)
+  reps <- rep(NA, b)
+  for (i in 1:b) {
+    shuf <- sample(c(x_words, y_words))
+    repl_x_words <- shuf[1:lx]
+    repl_y_words <- shuf[(lx + 1):(lx + ly)]
+    S_xab <- apply(pre_cos[repl_x_words, a_words], 1, mean) -
+      apply(pre_cos[repl_x_words, b_words], 1, mean)
+    S_yab <- apply(pre_cos[repl_y_words, a_words], 1, mean) -
+      apply(pre_cos[repl_y_words, b_words], 1, mean)
+    reps[i] <- sum(S_xab) - sum(S_yab)
+  }
+  p_val <- sum(reps > S_xyab) / length(reps)
+
+  df <- data.frame(S_xyab = S_xyab,
+                   d = effect,
+                   p_value = p_val)
+  rownames(df) <- NULL
+  df
+}
+

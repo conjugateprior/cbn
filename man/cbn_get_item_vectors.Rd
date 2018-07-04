@@ -18,5 +18,5 @@ a matrix with word vectors as rows
 Returns a matrix containing word vectors for the items used in one
 of the studies (WEAT1 through WEAT10 or WEFAT1 or WEFAT2).
 If \code{type} == "all" then vectors for all items used in any of the studies
-is returned. Words are rownames.
+is returned. Words are row names.
 }

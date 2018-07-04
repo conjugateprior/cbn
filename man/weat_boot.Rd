@@ -2,7 +2,7 @@
 % Please edit documentation in R/statistics.R
 \name{weat_boot}
 \alias{weat_boot}
-\title{WEFAT via simple item bootstrap}
+\title{WEAT via simple item bootstrap}
 \usage{
 weat_boot(items, vectors, x_name, y_name, a_name, b_name, b = 300,
   se.calc = c("sd", "quantile"))
@@ -76,14 +76,16 @@ The sign of the statistic is arbitrary. If you wish to reverse
 the ordering just swap the values of \code{a_name} for \code{b_name}
 or \code{x_name} and \code{y_name} when calling it.
 
-Note that this is not the statistic reported in the original paper.
+Note that this is not the statistic reported in the original paper.  This
+bootstraps within each target categories (x and y) and within each attribute
+category (a and b).
 }
 \examples{
 its <- cbn_get_items("WEAT", 1)
 its_vecs <- cbn_get_item_vectors("WEAT", 1)
 res <- weat_boot(its, its_vecs,
-                 x_name = "Pleasant", y_name= "Unpleasant",
-                 a_name = "Flowers", b_name = "Insects",
+                 x_name = "Flowers", y_name = "Insects",
+                 a_name = "Pleasant", b_name= "Unpleasant",
                  se.calc = "quantile")
 res
 }
