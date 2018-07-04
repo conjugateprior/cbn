@@ -28,6 +28,14 @@ number and be prepared to wait a little longer.  In most cases the p values is
 less than 0.0001, so imprecision has no real implications for 
 statistical confidence.
 
+First we'll load the package and set up some graphics parameters.
+```{r}
+library(cbn)
+
+library(ggplot2)
+theme_set(theme_minimal())
+```
+
 ### Flowers vs Insects
 
 ```{r}
@@ -141,7 +149,59 @@ weat_perm(its, vecs, x_name = "YoungNames", y_name = "OldNames",
           a_name = "Pleasant", b_name = "Unpleasant", 1000)
 ```
  
-## WEFAT (Figures 1 and 2)
+## WEFAT (Figure 1)
 
 tba
+
+## WEFAT (Figure 2)
+
+```{r}
+its <- cbn_get_items("WEFAT", 2)
+its_vecs <- cbn_get_item_vectors("WEFAT", 2)
+res <- wefat(its, its_vecs, x_name = "AndrogynousNames",
+             a_name = "FemaleAttributes", b_name = "MaleAttributes")
+head(res)
+```
+
+Next we find the gender proportions for each name from the census.  In the paper
+a gender score is constructed from the population proportions (it's not clear 
+how this was done or where the data came from in more detail than 'the 1990 
+US census').  The replication materials bundle these as 
+`cbn_gender_name_stats_census1990` 
+```{r}
+data(cbn_gender_name_stats_census1990)
+head(cbn_gender_name_stats_census1990)
+```
+However, it's not clear how the graphs x values come out of this data set, so 
+we'll use instead the `gender` package, which queries the US 
+Social Security Administration to get the proportion of stated males and females 
+with any particular first name.  A version of this data is bundled with the package
+```{r}
+data(cbn_gender_name_stats)
+head(cbn_gender_name_stats)
+```
+We join it to `res`
+```{r}
+res <- merge(res, cbn_gender_name_stats, 
+             by.x = "Word", by.y = "name")
+```
+and plot the statistic against the gender proportions (converted to
+percentages)
+```{r}
+ggplot(res, aes(x = 100 * proportion_female, y = S_wab, color = S_wab)) +
+  geom_hline(yintercept = 0, size = 2, col = "grey") + 
+  geom_point(size = 5, alpha = 0.9) +
+  scale_colour_gradient2(low = "blue", mid = "yellow", high = "red", 
+                         guide = FALSE) +
+  xlim(0, 100) +
+  ylim(-2, 2) +
+  xlab("Percentage of people with name who are women") +
+  ylab("Strength of association of name vector with female gender")
+```
+
+The correlation is
+```{r}
+cor.test(res$S_wab, res$proportion_female)
+```
+which is a tiny bit stronger than the relationship in the paper.
 

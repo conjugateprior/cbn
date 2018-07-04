@@ -2,7 +2,10 @@
 title: "Alternative Statistics"
 author: "Will Lowe"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 7
+    fig_height: 7 
 vignette: >
   %\VignetteIndexEntry{Alternative Statistics}
   %\VignetteEngine{knitr::rmarkdown}

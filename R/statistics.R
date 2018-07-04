@@ -305,3 +305,51 @@ weat_perm <- function(items, vectors, x_name, y_name, a_name, b_name, b = 1000){
   df
 }
 
+
+#' Compute the Paper's WEFAT statistic
+#'
+#' Computes the WEFAT statistic from the paper.  No standard error is currently
+#' computed.
+#'
+#' @param items information about the items, typically from
+#'              \code{\link{cbn_get_items}}
+#' @param vectors a matrix of word vectors for all the study items, typically
+#'                from \code{\link{cbn_get_item_vectors}}
+#' @param x_name twe \emph{name} of the target word condition, e.g. "AndrogeynousNames"
+#'               in WEFAT 2
+#' @param a_name the name of the first attribute, e.g. "MaleAttributes" in
+#'               WEFAT 2
+#' @param b_name the name of the second attribute, e.g. "FemaleAttributes" in
+#'               WEFAT 2
+#'
+#' @return a data frame with columns \code{Word} and \code{S_wab}, the value of the
+#'         statistic.
+#' @export
+#'
+#' @examples
+#' its <- cbn_get_items("WEFAT", 2)
+#' vecs <- cbn_get_item_vectors("WEFAT", 2)
+#' wefs <- wefat(its, vecs, x_name = "AndrogynousNames",
+#'               a_name = "MaleAttributes", b_name = "FemaleAttributes")
+#' props <- cbn_gender_name_stats[, c('name', 'proportion_male')]
+#' wefs_props <- merge(wefs, props, by.x = "Word", by.y = "name")
+#' cor.test(wefs_prop$Word, props$name)
+#'
+wefat <- function(items, vectors, x_name, a_name, b_name){
+  x_words <- items$Word[items$Condition == x_name]
+  a_words <- items$Word[items$Condition == a_name]
+  b_words <- items$Word[items$Condition == b_name]
+
+  pre_cos <- cbn_cosine(vectors) # Compute just once
+
+  # point estimate straight from the paper
+  S_xab <- apply(pre_cos[x_words, a_words], 1, mean) -
+    apply(pre_cos[x_words, b_words], 1, mean)
+  S_denom <- apply(pre_cos[x_words, c(a_words, b_words)], 1, sd)
+  S_wab <- S_xab / S_denom
+
+  df <- data.frame(Word = x_words,
+                   S_wab = S_wab)
+  rownames(df) <- NULL
+  df
+}
