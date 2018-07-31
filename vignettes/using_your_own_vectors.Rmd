@@ -1,5 +1,5 @@
 ---
-title: "Using Your Own Vectors"
+title: "Using Your Own Items and Vectors"
 author: "Will Lowe"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -16,7 +16,23 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Using Your Own Vectors
+To run the statistics you'll need your own items and your own vectors.  The process
+has two parts
+
+1. Acquire a list of words and associate them with a condition
+2. Extract vectors for each word
+
+## Defining Your Own Items
+
+The statistical functions require a data frame that contains, at a minimum
+two columns: `Word` and `Condition`.  There may also be a columns `Study` to
+note what the study will be called and optionally `role` to remind you which 
+conditions are attributes and which targets.
+
+You can use the `cbn_make_items` to create a suitable set of items from 
+vectors of words, condition labels, and study name.
+
+## Extracting Your Own Vectors
 
 The `cbn` package bundles all the vectors you will need to replicate the 
 paper analyses using the GloVe 840B 300-dimensional Common Crawl data. 

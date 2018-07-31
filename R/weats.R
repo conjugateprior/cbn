@@ -14,6 +14,17 @@
 #' @importFrom Rcpp sourceCpp
 NULL
 
+#' kneer
+#'
+#' Items for the Kneer Study (see also \code{\link{kneer_vecs}}).
+"kneer"
+
+#' kneer_vecs
+#'
+#' Vectors corresponding to items for the Kneer Study
+#' (see also \code{\link{kneer}}).
+"kneer_vecs"
+
 #' LIWC2001
 #'
 #' This is the Linguistic Inquiry and Word Count dictionary from 2001.
@@ -129,6 +140,38 @@ cbn_get_items <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
 }
 
 
+#' Make items
+#'
+#' @param studyname Name of your study
+#' @param words a vector of words
+#' @param conditions a vector of condition labels (must be the same length as
+#'        \code{words})
+#' @param roles An optional vector of role description labels (must be the same length as
+#'        \code{words}). Values are either \code{target} or \code{attribute}
+#'
+#' @return a set of items
+#' @export
+cbn_make_items <- function(studyname, words, conditions, roles = NULL){
+  if (length(words) != length(conditions))
+    stop("words and conditions must be the length")
+
+  df <- data.frame(Study = studyname,
+                   Word = words,
+                   Condition = conditions,
+                   stringsAsFactors = TRUE)
+  if (!is.null(roles))
+    if (length(roles) == length(words))
+      df$Role = roles
+    else
+      stop("words and conditions and roles must be the same length")
+  if (length(unique(df$Word)) != length(df$Word))
+    stop("words must be unique")
+
+  class(df) <- c("cbn_study", class(df))
+  df
+}
+
+
 #' Summary Method for Study Items
 #'
 #' A summary method for study items extracted via \code{\link{cbn_get_items}}.
@@ -144,8 +187,12 @@ cbn_get_items <- function(type = c("all", "WEAT", "WEFAT"), number = 1){
 #' summary(its)
 #'
 summary.cbn_study <- function(object, ...){
-  s <- aggregate(Word ~ Condition + Role, data = object, FUN = length)
-  colnames(s)[3] <- "N"
+  if (is.null(object$Role))
+    f <- Word ~ Condition
+  else
+    f <- Word ~ Condition + Role
+  s <- aggregate(f, data = object, FUN = length)
+  colnames(s)[colnames(s) == "Word"] <- "N"
   cat(unique(object[,'Study']), "\n")
   print.data.frame(s, row.names = FALSE)
   invisible(s)
