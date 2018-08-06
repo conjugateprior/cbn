@@ -37,6 +37,6 @@ wefs <- wefat(its, vecs, x_name = "AndrogynousNames",
               a_name = "MaleAttributes", b_name = "FemaleAttributes")
 props <- cbn_gender_name_stats[, c('name', 'proportion_male')]
 wefs_props <- merge(wefs, props, by.x = "Word", by.y = "name")
-cor.test(wefs_prop$Word, props$name)
+cor.test(wefs_props$S_wab, wefs_props$proportion_male)
 
 }

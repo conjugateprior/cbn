@@ -333,7 +333,7 @@ weat_perm <- function(items, vectors, x_name, y_name, a_name, b_name, b = 1000){
 #'               a_name = "MaleAttributes", b_name = "FemaleAttributes")
 #' props <- cbn_gender_name_stats[, c('name', 'proportion_male')]
 #' wefs_props <- merge(wefs, props, by.x = "Word", by.y = "name")
-#' cor.test(wefs_prop$Word, props$name)
+#' cor.test(wefs_props$S_wab, wefs_props$proportion_male)
 #'
 wefat <- function(items, vectors, x_name, a_name, b_name){
   x_words <- items$Word[items$Condition == x_name]
