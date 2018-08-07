@@ -1,0 +1,9 @@
+pandoc: 1.19.2.1
+pkgdown: 1.1.0
+pkgdown_sha: ~
+articles:
+  alternative_statistics: alternative_statistics.html
+  kneer: kneer.html
+  replication_replication: replication_replication.html
+  using_your_own_vectors: using_your_own_vectors.html
+

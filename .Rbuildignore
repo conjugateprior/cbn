@@ -1,2 +1,3 @@
 ^cbn\.Rproj$
 ^\.Rproj\.user$
+^\.travis\.yml$
