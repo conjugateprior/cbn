@@ -119,8 +119,8 @@ its_vecs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cb
                  <span class="dt">a_name =</span> <span class="st">"Pleasant"</span>, <span class="dt">b_name =</span> <span class="st">"Unpleasant"</span>,
                  <span class="dt">se.calc =</span> <span class="st">"quantile"</span>)
 res
-<span class="co">#&gt;        diff       lwr       upr    median</span>
-<span class="co">#&gt; 1 0.1547512 0.1016231 0.1966195 0.1485927</span></code></pre></div>
+<span class="co">#&gt;        diff        lwr       upr    median</span>
+<span class="co">#&gt; 1 0.1547512 0.09904213 0.2164269 0.1460651</span></code></pre></div>
 <p>Apparently flowers are more pleasant than insects.</p>
 </div>
 <div id="replicating-wefat" class="section level2">
@@ -135,12 +135,12 @@ its_vecs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cb
                   <span class="dt">se.calc =</span> <span class="st">"quantile"</span>)
 <span class="kw">head</span>(res)
 <span class="co">#&gt;        Careers       diff        lwr         upr     median</span>
-<span class="co">#&gt; 1        nurse -0.1766406 -0.2321746 -0.12262488 -0.1699421</span>
-<span class="co">#&gt; 2 receptionist -0.1369632 -0.1771082 -0.08764670 -0.1330653</span>
-<span class="co">#&gt; 3    hygienist -0.1182356 -0.1491636 -0.08004055 -0.1164189</span>
-<span class="co">#&gt; 4    librarian -0.1158335 -0.1422554 -0.07809907 -0.1140293</span>
-<span class="co">#&gt; 5 nutritionist -0.1115838 -0.1562356 -0.05603441 -0.1110424</span>
-<span class="co">#&gt; 6    therapist -0.1042064 -0.1446527 -0.05594589 -0.1033222</span></code></pre></div>
+<span class="co">#&gt; 1        nurse -0.1766406 -0.2362785 -0.10485537 -0.1714612</span>
+<span class="co">#&gt; 2 receptionist -0.1369632 -0.1807432 -0.08080623 -0.1328347</span>
+<span class="co">#&gt; 3    hygienist -0.1182356 -0.1511249 -0.07728667 -0.1147665</span>
+<span class="co">#&gt; 4    librarian -0.1158335 -0.1445471 -0.07736824 -0.1137756</span>
+<span class="co">#&gt; 5 nutritionist -0.1115838 -0.1564542 -0.05811263 -0.1080202</span>
+<span class="co">#&gt; 6    therapist -0.1042064 -0.1439760 -0.05840242 -0.1008730</span></code></pre></div>
 <p>This is a bit hard to interpret, so we’ll make a picture</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(res, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> median, <span class="dt">y =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(res))) <span class="op">+</span>
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">col =</span> <span class="st">"grey"</span>) <span class="op">+</span>
