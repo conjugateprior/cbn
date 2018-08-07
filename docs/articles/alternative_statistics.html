@@ -117,7 +117,7 @@ its_vecs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cb
                  <span class="dt">se.calc =</span> <span class="st">"quantile"</span>)
 res
 <span class="co">#&gt;        diff        lwr       upr    median</span>
-<span class="co">#&gt; 1 0.1547512 0.08724087 0.2105806 0.1481014</span></code></pre></div>
+<span class="co">#&gt; 1 0.1547512 0.08787219 0.2091178 0.1481398</span></code></pre></div>
 <p>Apparently flowers are more pleasant than insects.</p>
 </div>
 <div id="replicating-wefat" class="section level2">
@@ -132,12 +132,12 @@ its_vecs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cb
                   <span class="dt">se.calc =</span> <span class="st">"quantile"</span>)
 <span class="kw">head</span>(res)
 <span class="co">#&gt;        Careers       diff        lwr         upr     median</span>
-<span class="co">#&gt; 1        nurse -0.1766406 -0.2298179 -0.11658746 -0.1747572</span>
-<span class="co">#&gt; 2 receptionist -0.1369632 -0.1810730 -0.07979274 -0.1343161</span>
-<span class="co">#&gt; 3    hygienist -0.1182356 -0.1487452 -0.07534267 -0.1157604</span>
-<span class="co">#&gt; 4    librarian -0.1158335 -0.1445287 -0.08203122 -0.1146758</span>
-<span class="co">#&gt; 5 nutritionist -0.1115838 -0.1606020 -0.06198415 -0.1079001</span>
-<span class="co">#&gt; 6    therapist -0.1042064 -0.1427290 -0.05181135 -0.1021855</span></code></pre></div>
+<span class="co">#&gt; 1        nurse -0.1766406 -0.2347793 -0.11659004 -0.1713707</span>
+<span class="co">#&gt; 2 receptionist -0.1369632 -0.1873617 -0.08162812 -0.1331052</span>
+<span class="co">#&gt; 3    hygienist -0.1182356 -0.1514190 -0.07916550 -0.1158925</span>
+<span class="co">#&gt; 4    librarian -0.1158335 -0.1425213 -0.08330271 -0.1131277</span>
+<span class="co">#&gt; 5 nutritionist -0.1115838 -0.1616845 -0.06140949 -0.1099395</span>
+<span class="co">#&gt; 6    therapist -0.1042064 -0.1469076 -0.06003664 -0.1040616</span></code></pre></div>
 <p>This is a bit hard to interpret, so we’ll make a picture</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(res, <span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> median, <span class="dt">y =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(res))) <span class="op">+</span>
 <span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_point">geom_point</a></span>(<span class="dt">col =</span> <span class="st">"grey"</span>) <span class="op">+</span>
