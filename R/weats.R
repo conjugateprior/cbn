@@ -14,17 +14,6 @@
 #' @importFrom Rcpp sourceCpp
 NULL
 
-#' kneer
-#'
-#' Items for the Kneer Study (see also \code{\link{kneer_vecs}}).
-"kneer"
-
-#' kneer_vecs
-#'
-#' Vectors corresponding to items for the Kneer Study
-#' (see also \code{\link{kneer}}).
-"kneer_vecs"
-
 #' Gender Proportions for Names in the US Population
 #'
 #' This data set contains for each name used in \emph{any} of the studies,
