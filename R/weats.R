@@ -25,28 +25,6 @@ NULL
 #' (see also \code{\link{kneer}}).
 "kneer_vecs"
 
-#' LIWC2001
-#'
-#' This is the Linguistic Inquiry and Word Count dictionary from 2001.
-#' It has word lists for the following somewhat self-explanatory
-#' topics:
-#'
-#' Pronoun, I, We, Self, You, Other, Negate, Assent, Article, Preps, Number,
-#' Affect, Posemo, Posfeel, Optim, Negemo, Anx, Anger, Sad, Cogmech, Cause,
-#' Insight, Discrep, Inhib, Tentat, Certain, Senses, See, Hear, Feel, Social,
-#' Comm, Othref, Friends, Family, Humans, Time, Past, Present, Future, Space,
-#' Up, Down, Incl, Excl, Motion, Occup, School, Job, Achieve, Leisure, Home,
-#' Sports, TV, Music, Money, Metaph, Relig, Death, Physcal, Body, Sexual,
-#' Eating, Sleep, Groom, Swear, Nonfl, Fillers
-#'
-#' Note 1: Some of the words lists are wildcarded.  The current extraction code
-#' does not work with these, so choose some representative completions.
-#'
-#' Note 2: This dictionary is proprietary (though how that works with federal
-#' money is anybody's guess) so remove before publishing the package.
-#'
-"LIWC2001"
-
 #' Gender Proportions for Names in the US Population
 #'
 #' This data set contains for each name used in \emph{any} of the studies,
