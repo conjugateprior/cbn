@@ -1,11 +1,19 @@
 context("Vectors")
 library(cbn)
 
+check_travis <- function() {
+  if (tolower(Sys.getenv("TRAVIS")) == "true") {
+    skip("Skipping the environment variable setting on Travis")
+  }
+}
+
 oldvecfile <- cbn_get_vectorfile_location()
 vfile <- tempfile()
 writeLines("sausage 0.1 0.2 0.3 1.4\nroll 12.0 3 3 0.00001\n", con = vfile)
 
 test_that("set and reset the environment variable", {
+  check_travis()
+
   fullvfile <- normalizePath(vfile)
   cbn_set_vectorfile_location(vfile)
   expect_true(Sys.getenv("CBN_VECTORS_LOCATION") == fullvfile)
