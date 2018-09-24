@@ -22,17 +22,30 @@ has two parts
 1. Acquire a list of words and associate them with a condition
 2. Extract vectors for each word
 
-## Defining Your Own Items
+## Associate words with conditions
 
-The statistical functions require a data frame that contains, at a minimum
-two columns: `Word` and `Condition`.  There may also be a columns `Study` to
-note what the study will be called and optionally `role` to remind you which 
-conditions are attributes and which targets.
+To see the format required for items (words) take a look at the item information 
+from the first WEAT study
+```{r, eval = FALSE}
+weat1 <- cbn_get_items(type = "WEAT")
+```
+the top of this data frame looks like 
+```{r eval = FALSE}
+  Study Condition     Word   Role
+1 WEAT1   Flowers    aster target
+2 WEAT1   Flowers   clover target
+3 WEAT1   Flowers hyacinth target
+4 WEAT1   Flowers marigold target
+5 WEAT1   Flowers    poppy target
+6 WEAT1   Flowers   azalea target
+```
+Here, the study is called `WEAT1`, the conditions are `Flowers`, `Insects`, 
+the `target` roles, and `Pleasant` and `Unpleasant`, the `attribute` roles. 
+The helper function `cbn_make_items` can be helpful for creating this structure 
+for your own words.  Naturally the words you have vectors for should match the 
+words you have item information for. 
 
-You can use the `cbn_make_items` to create a suitable set of items from 
-vectors of words, condition labels, and study name.
-
-## Extracting Your Own Vectors
+## Extract vectors for each word
 
 The `cbn` package bundles all the vectors you will need to replicate the 
 paper analyses using the GloVe 840B 300-dimensional Common Crawl data. 
@@ -97,29 +110,8 @@ The matrix has `words` as rownames and no column names.  In the event that
 one of your words is not found in the vector file, the corresponding row of 
 `mat` is filled with NAs.
 
-### Analyze Your Vectors
+## Analyze your vectors
 
-Once you've gotten your vectors set up you'll need some item information. 
-To see the format required take a look at the item information from the first WEAT 
-study
-```{r, eval = FALSE}
-weat1 <- cbn_get_items(type = "WEAT")
-```
-the top of this data frame looks like 
-```{r eval = FALSE}
-  Study Condition     Word   Role
-1 WEAT1   Flowers    aster target
-2 WEAT1   Flowers   clover target
-3 WEAT1   Flowers hyacinth target
-4 WEAT1   Flowers marigold target
-5 WEAT1   Flowers    poppy target
-6 WEAT1   Flowers   azalea target
-```
-
-Here, the study is called `WEAT1`, the conditions are `Flowers`, `Insects`, 
-the `target` roles, and `Pleasant` and `Unpleasant`, the `attribute` roles. 
-The helper function `cbn_make_items` can be helpful for creating this structure 
-for your own words.  Naturally the words you have vectors for should match the 
-words you have item information for. 
-
-Now you can use the statistical functions as described in the other vignettes.
+With item information and corresponding vectors for your own words 
+(or your own vectors) you can now use all the statistical functions 
+described in the other vignettes.

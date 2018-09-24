@@ -92,15 +92,24 @@
 <li>Acquire a list of words and associate them with a condition</li>
 <li>Extract vectors for each word</li>
 </ol>
-<div id="defining-your-own-items" class="section level2">
+<div id="associate-words-with-conditions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#defining-your-own-items" class="anchor"></a>Defining Your Own Items</h2>
-<p>The statistical functions require a data frame that contains, at a minimum two columns: <code>Word</code> and <code>Condition</code>. There may also be a columns <code>Study</code> to note what the study will be called and optionally <code>role</code> to remind you which conditions are attributes and which targets.</p>
-<p>You can use the <code>cbn_make_items</code> to create a suitable set of items from vectors of words, condition labels, and study name.</p>
+<a href="#associate-words-with-conditions" class="anchor"></a>Associate words with conditions</h2>
+<p>To see the format required for items (words) take a look at the item information from the first WEAT study</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weat1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cbn_get_items.html">cbn_get_items</a></span>(<span class="dt">type =</span> <span class="st">"WEAT"</span>)</code></pre></div>
+<p>the top of this data frame looks like</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  Study Condition     Word   Role
+<span class="dv">1</span> WEAT1   Flowers    aster target
+<span class="dv">2</span> WEAT1   Flowers   clover target
+<span class="dv">3</span> WEAT1   Flowers hyacinth target
+<span class="dv">4</span> WEAT1   Flowers marigold target
+<span class="dv">5</span> WEAT1   Flowers    poppy target
+<span class="dv">6</span> WEAT1   Flowers   azalea target</code></pre></div>
+<p>Here, the study is called <code>WEAT1</code>, the conditions are <code>Flowers</code>, <code>Insects</code>, the <code>target</code> roles, and <code>Pleasant</code> and <code>Unpleasant</code>, the <code>attribute</code> roles. The helper function <code>cbn_make_items</code> can be helpful for creating this structure for your own words. Naturally the words you have vectors for should match the words you have item information for.</p>
 </div>
-<div id="extracting-your-own-vectors" class="section level2">
+<div id="extract-vectors-for-each-word" class="section level2">
 <h2 class="hasAnchor">
-<a href="#extracting-your-own-vectors" class="anchor"></a>Extracting Your Own Vectors</h2>
+<a href="#extract-vectors-for-each-word" class="anchor"></a>Extract vectors for each word</h2>
 <p>The <code>cbn</code> package bundles all the vectors you will need to replicate the paper analyses using the GloVe 840B 300-dimensional Common Crawl data. If, however, you want to work with different items you’ll need to point the package at your own file of word vectors. The process is:</p>
 <ol style="list-style-type: decimal">
 <li>Download and unpack a text file of word vectors</li>
@@ -136,22 +145,11 @@ mat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cbn_ext
 <p>If you want to watch progress, set <code>verbose</code> to TRUE. A second argument <code>report_every</code> controls how often a progress dot appears. It defaults to 100000 (lines).</p>
 <p><code>mat</code> is a matrix with as many rows as <code>words</code> and as many column as the length of the vectors. Ifyou are using the vectors above that will be 300. The matrix has <code>words</code> as rownames and no column names. In the event that one of your words is not found in the vector file, the corresponding row of <code>mat</code> is filled with NAs.</p>
 </div>
-<div id="analyze-your-vectors" class="section level3">
-<h3 class="hasAnchor">
-<a href="#analyze-your-vectors" class="anchor"></a>Analyze Your Vectors</h3>
-<p>Once you’ve gotten your vectors set up you’ll need some item information. To see the format required take a look at the item information from the first WEAT study</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weat1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cbn_get_items.html">cbn_get_items</a></span>(<span class="dt">type =</span> <span class="st">"WEAT"</span>)</code></pre></div>
-<p>the top of this data frame looks like</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  Study Condition     Word   Role
-<span class="dv">1</span> WEAT1   Flowers    aster target
-<span class="dv">2</span> WEAT1   Flowers   clover target
-<span class="dv">3</span> WEAT1   Flowers hyacinth target
-<span class="dv">4</span> WEAT1   Flowers marigold target
-<span class="dv">5</span> WEAT1   Flowers    poppy target
-<span class="dv">6</span> WEAT1   Flowers   azalea target</code></pre></div>
-<p>Here, the study is called <code>WEAT1</code>, the conditions are <code>Flowers</code>, <code>Insects</code>, the <code>target</code> roles, and <code>Pleasant</code> and <code>Unpleasant</code>, the <code>attribute</code> roles. The helper function <code>cbn_make_items</code> can be helpful for creating this structure for your own words. Naturally the words you have vectors for should match the words you have item information for.</p>
-<p>Now you can use the statistical functions as described in the other vignettes.</p>
 </div>
+<div id="analyze-your-vectors" class="section level2">
+<h2 class="hasAnchor">
+<a href="#analyze-your-vectors" class="anchor"></a>Analyze your vectors</h2>
+<p>With item information and corresponding vectors for your own words (or your own vectors) you can now use all the statistical functions described in the other vignettes.</p>
 </div>
   </div>
 
@@ -160,8 +158,9 @@ mat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cbn_ext
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#defining-your-own-items">Defining Your Own Items</a></li>
-      <li><a href="#extracting-your-own-vectors">Extracting Your Own Vectors</a></li>
+<li><a href="#associate-words-with-conditions">Associate words with conditions</a></li>
+      <li><a href="#extract-vectors-for-each-word">Extract vectors for each word</a></li>
+      <li><a href="#analyze-your-vectors">Analyze your vectors</a></li>
       </ul>
 </div>
       </div>
