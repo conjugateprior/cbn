@@ -49,9 +49,10 @@ still want to use the Common Crawl, but these instructions will work for
 any word vectors that arrive in the same file format.  That format is
 essentially
 ```
-<word><space><float><space> ... <space><float><newline>
+sausage 0.1234 -0.5555 1.4149
 ```
-and this is what the code will assume when attempting to read things in.
+i.e. word, space, float, space, float, space float ... newline. 
+This is what the code will assume when attempting to read things in.
 
 ### Download and unpack a text file of word vectors
 
@@ -98,4 +99,27 @@ one of your words is not found in the vector file, the corresponding row of
 
 ### Analyze Your Vectors
 
-(To Be Written)
+Once you've gotten your vectors set up you'll need some item information. 
+To see the format required take a look at the item information from the first WEAT 
+study
+```{r, eval = FALSE}
+weat1 <- cbn_get_items(type = "WEAT")
+```
+the top of this data frame looks like 
+```{r eval = FALSE}
+  Study Condition     Word   Role
+1 WEAT1   Flowers    aster target
+2 WEAT1   Flowers   clover target
+3 WEAT1   Flowers hyacinth target
+4 WEAT1   Flowers marigold target
+5 WEAT1   Flowers    poppy target
+6 WEAT1   Flowers   azalea target
+```
+
+Here, the study is called `WEAT1`, the conditions are `Flowers`, `Insects`, 
+the `target` roles, and `Pleasant` and `Unpleasant`, the `attribute` roles. 
+The helper function `cbn_make_items` can be helpful for creating this structure 
+for your own words.  Naturally the words you have vectors for should match the 
+words you have item information for. 
+
+Now you can use the statistical functions as described in the other vignettes.

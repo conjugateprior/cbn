@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cbn</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.3.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.3.1</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
       <h1>Using Your Own Items and Vectors</h1>
                         <h4 class="author">Will Lowe</h4>
             
-            <h4 class="date">2018-08-07</h4>
+            <h4 class="date">2018-09-23</h4>
       
       
       <div class="hidden name"><code>using_your_own_vectors.Rmd</code></div>
@@ -109,8 +109,8 @@
 <li>Analyze Your Vectors</li>
 </ol>
 <p>In the following I’ll assume that you still want to use the Common Crawl, but these instructions will work for any word vectors that arrive in the same file format. That format is essentially</p>
-<pre><code>&lt;word&gt;&lt;space&gt;&lt;float&gt;&lt;space&gt; ... &lt;space&gt;&lt;float&gt;&lt;newline&gt;</code></pre>
-<p>and this is what the code will assume when attempting to read things in.</p>
+<pre><code>sausage 0.1234 -0.5555 1.4149</code></pre>
+<p>i.e. word, space, float, space, float, space float … newline. This is what the code will assume when attempting to read things in.</p>
 <div id="download-and-unpack-a-text-file-of-word-vectors" class="section level3">
 <h3 class="hasAnchor">
 <a href="#download-and-unpack-a-text-file-of-word-vectors" class="anchor"></a>Download and unpack a text file of word vectors</h3>
@@ -139,7 +139,18 @@ mat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cbn_ext
 <div id="analyze-your-vectors" class="section level3">
 <h3 class="hasAnchor">
 <a href="#analyze-your-vectors" class="anchor"></a>Analyze Your Vectors</h3>
-<p>(To Be Written)</p>
+<p>Once you’ve gotten your vectors set up you’ll need some item information. To see the format required take a look at the item information from the first WEAT study</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weat1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cbn_get_items.html">cbn_get_items</a></span>(<span class="dt">type =</span> <span class="st">"WEAT"</span>)</code></pre></div>
+<p>the top of this data frame looks like</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  Study Condition     Word   Role
+<span class="dv">1</span> WEAT1   Flowers    aster target
+<span class="dv">2</span> WEAT1   Flowers   clover target
+<span class="dv">3</span> WEAT1   Flowers hyacinth target
+<span class="dv">4</span> WEAT1   Flowers marigold target
+<span class="dv">5</span> WEAT1   Flowers    poppy target
+<span class="dv">6</span> WEAT1   Flowers   azalea target</code></pre></div>
+<p>Here, the study is called <code>WEAT1</code>, the conditions are <code>Flowers</code>, <code>Insects</code>, the <code>target</code> roles, and <code>Pleasant</code> and <code>Unpleasant</code>, the <code>attribute</code> roles. The helper function <code>cbn_make_items</code> can be helpful for creating this structure for your own words. Naturally the words you have vectors for should match the words you have item information for.</p>
+<p>Now you can use the statistical functions as described in the other vignettes.</p>
 </div>
 </div>
   </div>
