@@ -1,5 +1,5 @@
 Package: cbn
-Version: 0.3.1
+Version: 0.3.2
 Title: Tools and replication materials for Caliskan, Bryson, and Narayanan (2017)
 Description: This package allows users to replicate the analysis in the paper and 
              also provides general purpose tools for working

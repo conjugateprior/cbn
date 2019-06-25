@@ -125,7 +125,7 @@ wefat_boot <- function(items, vectors, x_name, a_name, b_name,
 #' \code{x_name} and \code{y_name}) are
 #' separately resampled with replacement, and the statistic is
 #' computed.  The bootstrap sampling distribution of this statistic
-#' is summarized in the outpu by an approximate
+#' is summarized in the output by an approximate
 #' 95% confidence interval defined as either twice the standard deviation of the
 #' statistic across bootstrap samples if \code{se.calc} is "sd", or as the
 #' 0.025 and 0.975 quantiles of the bootstrap sampling distribution
